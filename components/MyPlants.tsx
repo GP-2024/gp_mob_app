@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 19,
 
-    borderWidth: 1,
-    borderColor: 'black',
+    // borderWidth: 1,
+    // borderColor: 'black',
     margin: 3,
   },
   topBanner: {
