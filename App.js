@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -7,6 +7,8 @@ import SignupScreen from '../gp_mob_app/components/SignupScreen';
 import LoginScreen from '../gp_mob_app/components/LoginScreen';
 import ProfileScreen from '../gp_mob_app/components/ProfileScreen';
 import ScanningScreen from '../gp_mob_app/components/ScanningScreen';
+// import Testo from '../gp_mob_app/components/Testo';
+import MyPlants from '../gp_mob_app/components/MyPlants';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
@@ -17,6 +19,7 @@ export default function App() {
   console.log("Code ran!");
   return (
     <NavigationContainer>
+      
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -33,6 +36,8 @@ export default function App() {
               iconName = 'address-card'
             } else if (route.name === 'Scan') {
               iconName = 'camera'
+            } else if (route.name === 'My Plants') {
+              iconName = 'leaf'
             }
 
             return <Icon
@@ -49,6 +54,8 @@ export default function App() {
         <Tab.Screen name="Sign Up" component={SignupScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen name="Scan" component={ScanningScreen} />
+        {/* <Tab.Screen name="Testo" component={Testo} /> */}
+        <Tab.Screen name="My Plants" component={MyPlants} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,16 @@
 // Import necessary React Native components
-import { View, Alert, Text, Button, Pressable, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import {
+  View,
+  Alert,
+  Text,
+  Button,
+  Pressable,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView
+} from 'react-native';
 import React, { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -47,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
           Object.keys(data)[0] === "access_token" &&
           Object.keys(data)[1] === "refresh_token") {
           Alert.alert("", "Login successful. Welcome!");
-        }else{
+        } else {
           Alert.alert("Incorrect E-mail or password");
         }
 

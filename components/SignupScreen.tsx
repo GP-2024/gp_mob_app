@@ -18,7 +18,7 @@ const SignupScreen = ({ navigation }) => {
   const [email, setemail] = useState('');
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
-  const [termsAgreement, settermsAgreement] = useState(true);
+  const [termsAgreement, settermsAgreement] = useState(false);
 
 
 

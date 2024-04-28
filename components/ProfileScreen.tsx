@@ -54,7 +54,7 @@ const ProfileScreen = () => {
             <Pressable
               style={styles.logoutButtonStyle}
               onPress={() => Alert.alert("", "Logout button has been pressed!")}
-              
+
             >
               <Text style={styles.logoutButtonTextStyle} >Logout</Text>
             </Pressable>
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 3,
     paddingHorizontal: 7,
-    backgroundColor:'transparent',
+    backgroundColor: 'transparent',
   },
   pfpContainerStyle: {
     // borderWidth: 3,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     fontSize: 20 * 0.8,
   },
   logoutButtonTextStyle: {
-    color:'white'
+    color: 'white'
   }
 
 });
