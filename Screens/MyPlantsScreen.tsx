@@ -19,7 +19,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import {  LinearGradient } from '@rneui/themed';
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { NavigationScreenProps } from "react-navigation";
-import { CustomHeader } from "../components/Header";
 import SignupScreen from "./SignupScreen";
 import ItemCard from "../components/ItemCard";
 
