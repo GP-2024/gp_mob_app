@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -7,10 +7,10 @@ import SignupScreen from "./Screens/SignupScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import ScanningScreen from "./Screens/ScanningScreen";
-// import Testo from '../gp_mob_app/components/Testo';
 import MyPlants from "./Screens/MyPlantsScreen";
 
-import Icon from "react-native-vector-icons/FontAwesome6";
+import { MaterialIcons } from "@expo/vector-icons";
+import defaultStyles from "./config/styles";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,33 +24,93 @@ export default function App() {
                         let iconName;
 
                         if (route.name === "Login") {
-                            // iconName = focused
-                            //   ? 'ios-information-circle'
-                            //   : 'ios-information-circle-outline';
-                            iconName = "arrow-right-to-bracket";
+                            iconName = "arrow-forward";
                         } else if (route.name === "Sign Up") {
-                            iconName = "user-plus";
+                            iconName = "person-add";
                         } else if (route.name === "Profile") {
-                            iconName = "address-card";
+                            iconName = "person";
                         } else if (route.name === "Scan") {
                             iconName = "camera";
                         } else if (route.name === "My Plants") {
-                            iconName = "leaf";
+                            iconName = "nature";
                         }
 
+                        // Don't show icon for Scan tab.
+                        if (route.name === "Scan") return null;
+
                         return (
-                            <Icon name={iconName} size={20} color="#2089DC" />
+                            <MaterialIcons
+                                name={iconName}
+                                size={20}
+                                color={defaultStyles.colors.primary}
+                            />
                         );
                     },
                     tabBarActiveTintColor: "black",
                     tabBarInactiveTintColor: "gray",
                 })}
+                tabBar={(props) => (
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                        }}
+                    >
+                        <TouchableOpacity
+                            onPress={() => props.navigation.navigate("Login")}
+                        >
+                            <MaterialIcons
+                                name="arrow-forward"
+                                size={20}
+                                color={defaultStyles.colors.primary}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => props.navigation.navigate("Sign Up")}
+                        >
+                            <MaterialIcons
+                                name="person-add"
+                                size={20}
+                                color={defaultStyles.colors.primary}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => props.navigation.navigate("Scan")}
+                        >
+                            <MaterialIcons
+                                name="camera"
+                                size={50}
+                                color={defaultStyles.colors.primary}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => props.navigation.navigate("Profile")}
+                        >
+                            <MaterialIcons
+                                name="person"
+                                size={20}
+                                color={defaultStyles.colors.primary}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() =>
+                                props.navigation.navigate("My Plants")
+                            }
+                        >
+                            <MaterialIcons
+                                name="nature"
+                                size={20}
+                                color={defaultStyles.colors.primary}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                )}
             >
                 <Tab.Screen name="Login" component={LoginScreen} />
                 <Tab.Screen name="Sign Up" component={SignupScreen} />
                 <Tab.Screen name="Profile" component={ProfileScreen} />
                 <Tab.Screen name="Scan" component={ScanningScreen} />
-                {/* <Tab.Screen name="Testo" component={Testo} /> */}
                 <Tab.Screen name="My Plants" component={MyPlants} />
             </Tab.Navigator>
         </NavigationContainer>
