@@ -8,14 +8,60 @@ import LoginScreen from "./Screens/LoginScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import ScanningScreen from "./Screens/ScanningScreen";
 import MyPlants from "./Screens/MyPlantsScreen";
+import SearchScreen from "./Screens/SearchScreen";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { MaterialIcons } from "@expo/vector-icons";
 import defaultStyles from "./config/styles";
 
-const Tab = createBottomTabNavigator();
+const getData = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('app_data');
+        if (jsonValue != null) {
+            console.log("=============");
+            console.log(JSON.parse(jsonValue));
+            console.log("=============");
+            return JSON.parse(jsonValue);
+        } else {
+            console.log("=============");
+            console.log(null);
+            console.log("=============");
+            return null;
+        }
 
+    } catch (e) {
+        // error reading value
+    }
+};
+
+const storeData = async (value) => {
+    try {
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem('app_data', jsonValue);
+    } catch (e) {
+        // saving error
+        console.log(e)
+    }
+};
+
+const Tab = createBottomTabNavigator();
+let isLoggedIn = false;
 export default function App() {
     console.log("Code ran!");
+
+    if (getData() !== null && 'access_token' in Object.keys(getData()) && 'refresh_token' in Object.keys(getData())) {
+        isLoggedIn = true;
+    } else {
+        isLoggedIn = false;
+    }
+
+    console.log("***debug***")
+    console.log(getData());
+    console.log(isLoggedIn);
+    console.log("******")
+
+    // isLoggedIn = false;
     return (
         <NavigationContainer>
             <Tab.Navigator
@@ -57,61 +103,93 @@ export default function App() {
                             alignItems: "center",
                         }}
                     >
-                        <TouchableOpacity
-                            onPress={() => props.navigation.navigate("Login")}
-                        >
-                            <MaterialIcons
-                                name="arrow-forward"
-                                size={20}
-                                color={defaultStyles.colors.primary}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => props.navigation.navigate("Sign Up")}
-                        >
-                            <MaterialIcons
-                                name="person-add"
-                                size={20}
-                                color={defaultStyles.colors.primary}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => props.navigation.navigate("Scan")}
-                        >
-                            <MaterialIcons
-                                name="camera"
-                                size={50}
-                                color={defaultStyles.colors.primary}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => props.navigation.navigate("Profile")}
-                        >
-                            <MaterialIcons
-                                name="person"
-                                size={20}
-                                color={defaultStyles.colors.primary}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() =>
-                                props.navigation.navigate("My Plants")
-                            }
-                        >
-                            <MaterialIcons
-                                name="nature"
-                                size={20}
-                                color={defaultStyles.colors.primary}
-                            />
-                        </TouchableOpacity>
+                        {isLoggedIn ?
+                            <>
+                                <TouchableOpacity
+                                    onPress={() => props.navigation.navigate("Scan")}
+                                >
+                                    <MaterialIcons
+                                        name="camera"
+                                        size={50}
+                                        color={defaultStyles.colors.primary}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => props.navigation.navigate("Profile")}
+                                >
+                                    <MaterialIcons
+                                        name="person"
+                                        size={20}
+                                        color={defaultStyles.colors.primary}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        props.navigation.navigate("My Plants")
+                                    }
+                                >
+                                    <MaterialIcons
+                                        name="nature"
+                                        size={20}
+                                        color={defaultStyles.colors.primary}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        props.navigation.navigate("Search")
+                                    }
+                                >
+                                    <MaterialIcons
+                                        name="search"
+                                        size={20}
+                                        color={defaultStyles.colors.primary}
+                                    />
+                                </TouchableOpacity>
+
+                            </>
+                            :
+                            <>
+                                <TouchableOpacity
+                                    onPress={() => props.navigation.navigate("Login")}
+                                >
+                                    <MaterialIcons
+                                        name="arrow-forward"
+                                        size={20}
+                                        color={defaultStyles.colors.primary}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => props.navigation.navigate("Sign Up")}
+                                >
+                                    <MaterialIcons
+                                        name="person-add"
+                                        size={20}
+                                        color={defaultStyles.colors.primary}
+                                    />
+                                </TouchableOpacity>
+                            </>
+                        }
+
                     </View>
                 )}
             >
-                <Tab.Screen name="Login" component={LoginScreen} />
-                <Tab.Screen name="Sign Up" component={SignupScreen} />
-                <Tab.Screen name="Profile" component={ProfileScreen} />
-                <Tab.Screen name="Scan" component={ScanningScreen} />
-                <Tab.Screen name="My Plants" component={MyPlants} />
+
+                {isLoggedIn ?
+                    <>
+                        <Tab.Screen name="Profile" component={ProfileScreen} />
+                        <Tab.Screen name="Scan" component={ScanningScreen} />
+                        <Tab.Screen name="My Plants" component={MyPlants} />
+                        <Tab.Screen name="Search" component={SearchScreen} />
+                    </>
+                    :
+                    <>
+                        <Tab.Screen name="Login" component={LoginScreen} />
+                        <Tab.Screen name="Sign Up" component={SignupScreen} />
+                    </>
+                }
+
+
+
             </Tab.Navigator>
         </NavigationContainer>
     );
