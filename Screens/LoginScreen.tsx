@@ -21,6 +21,7 @@ const validationSchema = Yup.object().shape({
     password: Yup.string().required().min(4).label("Password"),
 });
 
+
 const getData = async () => {
     try {
         const jsonValue = await AsyncStorage.getItem('app_data');

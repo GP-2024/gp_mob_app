@@ -1,193 +1,99 @@
-// Import necessary React Native components
-import {
-    View,
-    Alert,
-    Button,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    SafeAreaView,
-    ScrollView,
-    Pressable,
-} from "react-native";
-import React, { useState } from "react";
-import type { PropsWithChildren } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import {  LinearGradient } from '@rneui/themed';
+import React from "react";
+import { StyleSheet, View, Text, Pressable, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome6";
-import { NavigationScreenProps } from "react-navigation";
-import SignupScreen from "./SignupScreen";
+import defaultStyles from "../config/styles";
+import Separator from "../components/lists/Separator";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { Colors } from "react-native/Libraries/NewAppScreen";
-
-// Define the ScanningScreen component
 const ScanningScreen = () => {
     return (
-        <SafeAreaView style={styles.outerContainer}>
-            <ScrollView contentContainerStyle={styles.outerContainer}>
-                <View style={styles.buttonContainerStyle}>
-                    <Pressable
-                        style={styles.indentificationButtonStyle}
-                        onPress={() =>
-                            Alert.alert(
-                                "",
-                                "app should move you to identification camera!"
-                            )
-                        }
-                    >
-                        <View style={styles.scanButtonContentStyle}>
-                            <Icon name="expand" size={70} color="white" />
-                            <Text style={styles.scanButtonTextStyle}>
-                                Identify a Plant
-                            </Text>
-                        </View>
-                    </Pressable>
-                </View>
+        <View style={styles.container}>
+            <View style={styles.buttonContainer}>
+                <Pressable
+                    style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? "rgba(0,0,0,0.1)"
+                                : defaultStyles.colors.primary,
+                        },
+                        styles.button,
+                    ]}
+                    onPress={() =>
+                        Alert.alert(
+                            "",
+                            "App should move you to identification camera!"
+                        )
+                    }
+                >
+                    <View style={styles.buttonContent}>
+                        <MaterialCommunityIcons
+                            name="magnify"
+                            size={80}
+                            color="white"
+                        />
+                        <Text style={styles.buttonText}>Identify a Plant</Text>
+                    </View>
+                </Pressable>
+            </View>
 
-                <View style={styles.separatorContainerStyle}></View>
+            <Separator />
 
-                <View style={styles.buttonContainerStyle}>
-                    <Pressable
-                        style={styles.indentificationButtonStyle}
-                        onPress={() =>
-                            Alert.alert(
-                                "",
-                                "app should move you to diagnosis camera!"
-                            )
-                        }
-                    >
-                        <View style={styles.scanButtonContentStyle}>
-                            <Icon name="expand" size={70} color="white" />
-                            <Text style={styles.scanButtonTextStyle}>
-                                Diagnose a Plant
-                            </Text>
-                        </View>
-                    </Pressable>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            <View style={styles.buttonContainer}>
+                <Pressable
+                    style={styles.button}
+                    onPress={() =>
+                        Alert.alert(
+                            "",
+                            "App should move you to diagnosis camera!"
+                        )
+                    }
+                >
+                    <View style={styles.buttonContent}>
+                        <MaterialCommunityIcons
+                            name="stethoscope"
+                            size={75}
+                            color="white"
+                        />
+                        <Text style={styles.buttonText}>Diagnose a Plant</Text>
+                    </View>
+                </Pressable>
+            </View>
+        </View>
     );
 };
 
-// Define styles using StyleSheet
 const styles = StyleSheet.create({
-    outerContainer: {
+    container: {
         flex: 1,
-        flexDirection: "column",
-        alignItems: "stretch",
-        paddingHorizontal: 18,
-        paddingVertical: 19,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    topBanner: {
-        flex: 3.5,
         alignItems: "center",
         justifyContent: "center",
-        paddingBottom: 40,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    topTitleContainer: {
-        flex: 1,
-        alignItems: "flex-start",
-        justifyContent: "center",
-        paddingBottom: 10,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    secondaryTitleContainer: {
-        flex: 1,
-        alignItems: "flex-start",
-        justifyContent: "center",
-        paddingBottom: 5,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    inputContainer: {
-        flex: 1,
-        alignItems: "stretch",
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    sideButtonContainer: {
-        flex: 0.5,
-        alignItems: "flex-end",
-        justifyContent: "flex-start",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
+        backgroundColor: "white",
+        paddingHorizontal: 20,
     },
     buttonContainer: {
-        flex: 1,
-        alignItems: "stretch",
-        justifyContent: "center",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
+        marginVertical: 20,
     },
-    horizContainer: {
-        flex: 0.6,
-        flexDirection: "row",
-        alignItems: "stretch",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    centerContainer: {
-        flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
-    },
-    buttonContainerStyle: {
-        flex: 200,
-        // borderWidth: 1,
-        // borderColor: 'red',
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    separatorContainerStyle: {
-        flex: 1,
-        // borderWidth: 1,
-        // borderColor: 'red',
-        backgroundColor: "black",
-    },
-    indentificationButtonStyle: {
+    button: {
         width: 200,
         height: 200,
-        borderRadius: 200 / 20,
-        backgroundColor: "#2089DC",
-        padding: 20,
+        borderRadius: 20,
+        backgroundColor: defaultStyles.colors.primary,
+        alignItems: "center",
+        justifyContent: "center",
     },
-    scanButtonContentStyle: {
-        flexDirection: "column",
-        paddingHorizontal: 5,
+    buttonContent: {
+        alignItems: "center",
     },
-    scanButtonTextStyle: {
+    buttonText: {
         color: "white",
-        fontSize: 39.81 * 0.8,
+        fontSize: 18,
         fontWeight: "bold",
+        marginTop: 10,
+    },
+    separator: {
+        height: 20,
+        color: "black",
     },
 });
 
-// Export the component
 export default ScanningScreen;
