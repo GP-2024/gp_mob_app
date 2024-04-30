@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HOST } from "@env";
 
 const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label("Email"),
+    emailOrUsername: Yup.string().required().label("Email or Username"),
     password: Yup.string().required().min(4).label("Password"),
 });
 
@@ -53,38 +53,42 @@ const storeData = async (value) => {
 };
 
 function LoginScreen(props) {
-    const handleSubmit = async (values) => {
+    const handleSubmit = async ({ emailOrUsername, password }) => {
+        const isEmail = emailOrUsername.includes("@");
+        const body = isEmail
+            ? { email: emailOrUsername, password }
+            : { username: emailOrUsername, password };
+
         try {
             const response = await axios.post(
                 `${HOST}/auth/local/signin`,
-                values
+                body
             );
 
             console.log(response.data);
             storeData(response.data);
         } catch (error) {
-            console.log(error);
+            console.log(body);
+            console.log(error.response.data);
         }
     };
-
     return (
         <Screen style={styles.container}>
             <Logo width={100} height={100} style={styles.logo} />
             <AppText style={styles.title}>From Root To Bloom </AppText>
             <AppText style={styles.subTitle}>Login to your account</AppText>
             <AppForm
-                initialValues={{ email: "", password: "" }}
+                initialValues={{ emailOrUsername: "", password: "" }}
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}
             >
                 <AppFormField
                     autoCapitalize="none"
-                    placeholder="Email"
-                    textContentType="emailAddress"
-                    icon="email"
+                    placeholder="Email or Username"
+                    textContentType="username"
+                    icon="account"
                     autoCorrect={false}
-                    keyboardType="email-address"
-                    name="email"
+                    name="emailOrUsername"
                 />
                 <AppFormField
                     autoCapitalize="none"
