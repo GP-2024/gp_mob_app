@@ -61,6 +61,7 @@ function LoginScreen(props) {
             );
 
             console.log(response.data);
+            storeData(response.data);
         } catch (error) {
             console.log(error);
         }

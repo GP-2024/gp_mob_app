@@ -56,12 +56,12 @@ export default function App() {
         isLoggedIn = false;
     }
 
-    console.log("***debug***")
+    console.log("***debug**");
     console.log(getData());
     console.log(isLoggedIn);
     console.log("******")
 
-    // isLoggedIn = false;
+    // isLoggedIn = true;
     return (
         <NavigationContainer>
             <Tab.Navigator
