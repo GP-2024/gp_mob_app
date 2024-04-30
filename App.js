@@ -87,7 +87,7 @@ export default function App() {
                         return (
                             <MaterialIcons
                                 name={iconName}
-                                size={20}
+                                size={25}
                                 color={defaultStyles.colors.primary}
                             />
                         );
@@ -119,7 +119,7 @@ export default function App() {
                                 >
                                     <MaterialIcons
                                         name="person"
-                                        size={20}
+                                        size={25}
                                         color={defaultStyles.colors.primary}
                                     />
                                 </TouchableOpacity>
@@ -130,7 +130,7 @@ export default function App() {
                                 >
                                     <MaterialIcons
                                         name="nature"
-                                        size={20}
+                                        size={25}
                                         color={defaultStyles.colors.primary}
                                     />
                                 </TouchableOpacity>
@@ -141,7 +141,7 @@ export default function App() {
                                 >
                                     <MaterialIcons
                                         name="search"
-                                        size={20}
+                                        size={25}
                                         color={defaultStyles.colors.primary}
                                     />
                                 </TouchableOpacity>
@@ -154,7 +154,7 @@ export default function App() {
                                 >
                                     <MaterialIcons
                                         name="arrow-forward"
-                                        size={20}
+                                        size={25}
                                         color={defaultStyles.colors.primary}
                                     />
                                 </TouchableOpacity>
@@ -163,7 +163,7 @@ export default function App() {
                                 >
                                     <MaterialIcons
                                         name="person-add"
-                                        size={20}
+                                        size={25}
                                         color={defaultStyles.colors.primary}
                                     />
                                 </TouchableOpacity>
