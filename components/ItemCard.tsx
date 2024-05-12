@@ -7,6 +7,7 @@ import type { PropsWithChildren } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 // import LoginScreen from './LoginScreen';
+import defaultStyles from "../config/styles";
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     // borderWidth: 3,
     // borderColor: 'cyan',
     overflow: 'hidden',
-    backgroundColor: '#BACCDB',
+    backgroundColor: defaultStyles.colors.primaryBackground,
     marginBottom: 19,
     marginRight: 19,
     shadowColor: "#000",
