@@ -1,12 +1,18 @@
 // Import necessary React Native components
-import { View, TextInput, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Dimensions,SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getAccessToken } from '../components/auth';
 import SearchItemCard from '../components/SearchItemCard';
 import { HOST } from "@env";
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const SEARCH_API_URL = `${HOST}/trefle/search`;
+
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+const widthFactor = 0.88;
+const heightFactor = 0.09;
 
 function extractNameAndDescription(item) {
   let mainName = '';
@@ -72,7 +78,7 @@ const SearchScreen = () => {
         console.error('Error fetching plants:', error);
       }
       console.log("=============\n\n");
-    }else{
+    } else {
       console.log("not performing search because query length not greater than 1..");
       setPlantsData([]);
     }
@@ -87,6 +93,7 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView style={styles.outerContainer}>
+
       <View style={styles.searchSection}>
         <TextInput
           style={styles.input}
@@ -94,6 +101,7 @@ const SearchScreen = () => {
           onChangeText={(inputString) => setSearchQuery(inputString)}
           underlineColorAndroid="transparent"
         />
+        <Icon style={styles.searchIcon} name="magnifying-glass" size={20} color="#666666" />
       </View>
       <FlatList
         data={plantsData}
@@ -107,19 +115,23 @@ const SearchScreen = () => {
 
 // Define styles using StyleSheet
 const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    paddingHorizontal: 18,
-    paddingVertical: 19,
-  },
   searchSection: {
+    width: screenWidth * 0.88,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#fff',
+    // borderWidth: 1,
+    // borderColor: 'cyan',
     borderRadius: 5,
     overflow: 'hidden',
     marginBottom: 19,
+  },
+  searchIcon: {
+    padding: 10,
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // width:'10%'
   },
   input: {
     paddingLeft: 10,
@@ -127,8 +139,125 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 40,
     borderRadius: 5,
-    width: '88%',
+    // borderWidth: 1,
+    // borderColor: 'green',
+    width: '88%'
   },
+  outerContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    paddingHorizontal: 18,
+    paddingVertical: 19,
+
+    // borderWidth: 1,
+    // borderColor: 'black',
+    margin: 3,
+  },
+  topBanner: {
+    flex: 3.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 40,
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  topTitleContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingBottom: 10
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  secondaryTitleContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingBottom: 5
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  inputContainer: {
+    flex: 1,
+    alignItems: 'stretch',
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  sideButtonContainer: {
+    flex: 0.5,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  buttonContainer: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  horizContainer: {
+    flex: 0.6,
+    flexDirection: 'row',
+    alignItems: 'stretch',
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  centerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // margin: 3,
+  },
+  buttonContainerStyle: {
+    // flex: 200, heree
+    // borderWidth: 1,
+    // borderColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  separatorContainerStyle: {
+    flex: 1,
+    // borderWidth: 1,
+    // borderColor: 'red',
+    backgroundColor: 'black'
+  },
+  indentificationButtonStyle: {
+    width: 200,
+    height: 200,
+    borderRadius: 200 / 20,
+    backgroundColor: "#2089DC",
+    padding: 20
+  },
+  scanButtonContentStyle: {
+    flexDirection: 'column',
+    paddingHorizontal: 5,
+  },
+  scanButtonTextStyle: {
+    color: 'white',
+    fontSize: 39.81 * 0.8,
+    fontWeight: 'bold',
+  }
+
 });
 
 export default SearchScreen;
