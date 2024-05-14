@@ -23,6 +23,8 @@ const validationSchema = Yup.object().shape({
     password: Yup.string().required().min(4).label("Password"),
 });
 
+console.log(`LoginURL: ${HOST}/auth/local/signup`);
+
 function logCurrentTime() {
     const currentDate = new Date();
     const hours = currentDate.getHours();
@@ -79,7 +81,7 @@ function LoginScreen(props) {
 
             console.log(response.data);
             // storeData(response.data);
-            login(response.data.access_token,response.data.refresh_token);
+            login(response.data.tokens.access_token,response.data.tokens.refresh_token);
         } catch (error) {
             console.log(body);
             console.log(error.response.data);

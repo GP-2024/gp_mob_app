@@ -12,13 +12,15 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { addPlantToCollection,getAccessToken } from './auth';
+
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const widthFactor = 0.88;
 const heightFactor = 0.09;
 
 // Define the SearchItemCard component
-const SearchItemCard = ({ itemImageUrl, itemName, itemDescription }) => {
+const SearchItemCard = ({ itemImageUrl, itemName, itemDescription, itemID }) => {
 
   function logCurrentTime() {
     const currentDate = new Date();
@@ -29,6 +31,25 @@ const SearchItemCard = ({ itemImageUrl, itemName, itemDescription }) => {
     console.log(`Current time: ${hours}:${minutes}:${seconds}`);
   }
 
+  const addPlantToUserCollection = async (plantId) => {
+    try {
+      // Get the authentication token
+      const authToken = await getAccessToken();
+  
+      if (!authToken) {
+        console.error('Access token not found to add plant.');
+        return;
+      }
+  
+      // Call the function to add the plant to the collection
+      const result = await addPlantToCollection(plantId, authToken);
+      console.log('Plant added successfully:', result,'\n');
+      // Handle the result as needed in your application
+    } catch (error) {
+      console.error('Error adding plant to collection:', error);
+      // Handle error appropriately in your application
+    }
+  };
 
 
   return (
@@ -41,8 +62,29 @@ const SearchItemCard = ({ itemImageUrl, itemName, itemDescription }) => {
       />
       <View style={styles.cardContent}>
 
-        <Text style={styles.h6}>{itemName}</Text>
-        <Text style={styles.p}>{itemDescription}</Text>
+        <View style={styles.cardContentContainer}>
+          <Text style={styles.h6}>{itemName}</Text>
+          <Text style={styles.p}>{itemDescription}</Text>
+        </View>
+
+        <View style={styles.addButtonOuterContainer}>
+
+          <Pressable
+            onPress={() => {
+              console.log("Item:", itemID,"is asked to be added to my plant collection...");
+              addPlantToUserCollection(itemID);
+              
+            }}
+          >
+            <View style={styles.addButtonContainer}>
+              <Icon name="plus" size={20} color="white" />
+            </View>
+          </Pressable>
+
+
+        </View>
+
+
 
 
       </View>
@@ -64,11 +106,11 @@ const SearchItemCard = ({ itemImageUrl, itemName, itemDescription }) => {
 // Define styles using StyleSheet
 const styles = StyleSheet.create({
   card: {
-    flexDirection:'row',
+    flexDirection: 'row',
     borderRadius: 200 / 10,
-    width: screenWidth * widthFactor,  
+    width: screenWidth * widthFactor,
     height: screenHeight * heightFactor,
-    alignItems:'flex-start',
+    alignItems: 'flex-start',
     // borderWidth: 3,
     // borderColor: 'cyan',
     overflow: 'hidden',
@@ -83,8 +125,45 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
-    
+
     elevation: 12,
+  },
+  cardContentContainer: {
+
+    width: '65%',
+    // borderWidth: 1,
+    // borderColor: 'cyan',
+  },
+  addButtonContainer: {
+    backgroundColor: '#4E785A',
+    alignSelf: 'center',
+    // borderWidth: 1,
+    // borderColor: 'black',
+    borderRadius: 20,
+    padding: 5,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+
+  },
+  addButtonOuterContainer: {
+    width: '20%',
+    // height:'100%',
+    alignSelf: 'center',
+    // borderWidth: 1,
+    // borderColor: 'pink',
+    // alignContent:'center',
+    // alignItems:'center',
+    // verticalAlign:'middle',
+    paddingBottom: 5,
+    paddingTop: 5,
   },
   cardImageStyle: {
     // flex: 0.5,
@@ -94,12 +173,15 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     // flex: 0.5,
-    width: '100%', height: '60%',
+    flexDirection: 'row',
+    width: '95%', height: '100%',
     paddingHorizontal: 10,
-    paddingBottom: 10,
-    paddingTop: 10,
-    // borderWidth: 3,
+    paddingBottom: 5,
+    paddingTop: 5,
+
+    // borderWidth: 1,
     // borderColor: 'red',
+
     borderBottomRightRadius: 200 / 10,
     borderBottomLeftRadius: 200 / 10,
     // alignSelf:'flex-start'

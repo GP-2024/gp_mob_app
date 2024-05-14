@@ -1,5 +1,5 @@
 // Import necessary React Native components
-import { View, TextInput, FlatList, StyleSheet, Dimensions,SafeAreaView } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getAccessToken } from '../components/auth';
@@ -7,7 +7,7 @@ import SearchItemCard from '../components/SearchItemCard';
 import { HOST } from "@env";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
-const SEARCH_API_URL = `${HOST}/trefle/search`;
+const SEARCH_API_URL = `${HOST}/perenual/plants-details`;
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -66,6 +66,7 @@ const SearchScreen = () => {
     if (searchQuery.length > 1) {
       console.log("\n\n=======SEARCH======\n");
       console.log("Performing search for:", searchQuery, " ...\n");
+      console.log("url:\n",SEARCH_API_URL,"\n");
       try {
         const token = await getAccessToken();
         const response = await axios.get(SEARCH_API_URL, {
@@ -73,7 +74,8 @@ const SearchScreen = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPlantsData(response.data.data);
-        console.log("Found ", response.data.data.length, " results!\n");
+        // console.log("Found ", response.data.data.length, " results!\n");
+        console.log(response);
       } catch (error) {
         console.error('Error fetching plants:', error);
       }
@@ -86,6 +88,7 @@ const SearchScreen = () => {
 
   const gridRenderItem = ({ item }) => (
     <SearchItemCard
+      itemID={item.id}
       itemName={extractNameAndDescription(item)[0]}
       itemImageUrl={item.image_url ? item.image_url : 'https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg'}
       itemDescription={extractNameAndDescription(item)[1]} />
