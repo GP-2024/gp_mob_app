@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getAccessToken } from '../components/auth';
 import SearchItemCard from '../components/SearchItemCard';
-import { HOST } from "@env";
+// import { HOST } from "@env";
+const HOST = process.env.HOST;
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const SEARCH_API_URL = `${HOST}/perenual/plants-details`;

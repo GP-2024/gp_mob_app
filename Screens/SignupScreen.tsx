@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
     password: Yup.string().required().min(4).label("Password"),
 });
-console.log(`${HOST}/auth/local/signup`);
+
 
 function RegisterScreen(props) {
     const handleSubmit = async (values) => {
@@ -28,10 +28,14 @@ function RegisterScreen(props) {
                 `${HOST}/auth/local/signup`,
                 values
             );
-
+            console.log("trial...");
             console.log(response);
         } catch (error) {
-            console.log(error.response.data);
+            console.log("====CATCH====")
+            console.log(`${HOST}/auth/local/signup`);
+            console.log(error.response.data.message);
+            console.log("error catched...");
+            console.log("============")
         }
     };
 

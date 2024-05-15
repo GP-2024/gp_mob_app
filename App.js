@@ -62,6 +62,8 @@ function logCurrentTime() {
 
 
 const Tab = createBottomTabNavigator();
+
+
 // let isLoggedIn = false;
 
 export default function App() {

@@ -15,7 +15,8 @@ import AppText from "../components/AppText";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import useAuth from '../components/useAuth';
 
-import { HOST } from "@env";
+// import { HOST } from "@env";
+const HOST = process.env.HOST;
 
 
 const validationSchema = Yup.object().shape({
@@ -23,7 +24,7 @@ const validationSchema = Yup.object().shape({
     password: Yup.string().required().min(4).label("Password"),
 });
 
-console.log(`LoginURL: ${HOST}/auth/local/signup`);
+console.log(`LoginURL: ${HOST}/auth/local/signin`);
 
 function logCurrentTime() {
     const currentDate = new Date();
