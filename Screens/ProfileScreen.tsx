@@ -61,7 +61,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define the ProfileScreen component
 const ProfileScreen = () => {
-  const { isLoggedIn, login, logout } = useAuth();
+  const {  login, logout } = useAuth();
   // State variables for handling user input
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

@@ -12,18 +12,16 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { addPlantToCollection,getStoredTokens } from './auth';
-import { getAccessToken } from './useAuth';
 
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 const widthFactor = 0.88;
-const heightFactor = 0.09;
+const heightFactor = 0.2;
 
-// Define the SearchItemCard component
-const SearchItemCard = ({ itemImageUrl, itemName, itemDescription, itemID }) => {
-
+// Define the BlogItemCard component
+const BlogItemCard = ({ itemName, itemDescription, itemID, itemDate }) => {
+  const [expanded, setExpanded] = useState(false);
   function logCurrentTime() {
     const currentDate = new Date();
     const hours = currentDate.getHours();
@@ -33,65 +31,46 @@ const SearchItemCard = ({ itemImageUrl, itemName, itemDescription, itemID }) => 
     console.log(`Current time: ${hours}:${minutes}:${seconds}`);
   }
 
-  const addPlantToUserCollection = async (plantId) => {
-    try {
-      // Get the authentication token
-      const authToken = await getAccessToken();
-  
-      if (!authToken) {
-        console.error('Access token not found to add plant.');
-        return;
-      }
-  
-      // Call the function to add the plant to the collection
-      const result = await addPlantToCollection(plantId, authToken);
-      console.log('Plant added successfully:', result,'\n');
-      // Handle the result as needed in your application
-    } catch (error) {
-      console.error('Error adding plant to collection:', error);
-      // Handle error appropriately in your application
+  function truncateString(str) {
+    if (str.length > 150) {
+      return str.substring(0, 150) + "...";
+    } else {
+      return str;
     }
-  };
-
-
+  }
   return (
-    <View style={styles.card}>
 
-      <Image style={styles.cardImageStyle}
-        source={{
-          uri: itemImageUrl
-        }}
-      />
-      <View style={styles.cardContent}>
+    <Pressable
+      onPress={() => {
+        console.log("Blog:", itemID, "expanded.", expanded);
+        setExpanded(!expanded);
+      }}
+    >
+      <View style={styles.card}>
 
-        <View style={styles.cardContentContainer}>
-          <Text style={styles.h6}>{itemName}</Text>
-          <Text style={styles.p}>{itemDescription}</Text>
+        <View style={styles.cardContent}>
+
+          <View style={styles.cardContentContainer}>
+          <Text style={{fontSize:12,}}>{formatTimeString(itemDate)}</Text>
+            <Text style={styles.h4}>{itemName}</Text>
+
+            <Text style={styles.valueStyle}>{expanded ?
+              itemDescription : truncateString(itemDescription)}
+            </Text>
+          </View>
+
+          <View style={styles.addButtonOuterContainer}>
+
+
+          </View>
+
+
+
+
         </View>
-
-        <View style={styles.addButtonOuterContainer}>
-
-          <Pressable
-            onPress={() => {
-              console.log("Item:", itemID,"is asked to be added to my plant collection...");
-              addPlantToUserCollection(itemID);
-              
-            }}
-          >
-            <View style={styles.addButtonContainer}>
-              <Icon name="plus" size={20} color="white" />
-            </View>
-          </Pressable>
-
-
-        </View>
-
-
-
 
       </View>
-
-    </View>
+    </Pressable>
   );
 };
 
@@ -108,31 +87,33 @@ const SearchItemCard = ({ itemImageUrl, itemName, itemDescription, itemID }) => 
 // Define styles using StyleSheet
 const styles = StyleSheet.create({
   card: {
+    alignSelf: 'flex-start',
     flexDirection: 'row',
     borderRadius: 200 / 10,
     width: screenWidth * widthFactor,
-    height: screenHeight * heightFactor,
+    // height: screenHeight * heightFactor,
     alignItems: 'flex-start',
     // borderWidth: 3,
     // borderColor: 'cyan',
     overflow: 'hidden',
-    backgroundColor: defaultStyles.colors.primaryBackground,
-    marginBottom: 19,
-    marginRight: 19,
+    backgroundColor: '#C9C9C9',
+    marginBottom: 30,
+    marginRight: 30,
+    padding: 12,
 
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 3,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
 
-    elevation: 12,
+    elevation: 7,
   },
   cardContentContainer: {
 
-    width: '65%',
+    width: '100%',
     // borderWidth: 1,
     // borderColor: 'cyan',
   },
@@ -180,6 +161,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 5,
     paddingTop: 5,
+
 
     // borderWidth: 1,
     // borderColor: 'red',
@@ -297,6 +279,7 @@ const styles = StyleSheet.create({
   h4: {
     fontSize: 27.65 * 0.8,
     fontWeight: 'bold',
+    paddingBottom: 7,
   },
   h5: {
     fontSize: 23.04 * 0.8,
@@ -309,6 +292,10 @@ const styles = StyleSheet.create({
   },
   p: {
     fontSize: 17.5 * 0.8,
+  },
+  valueStyle: {
+    fontSize: 17,
+    fontWeight: 'normal'
   },
   input: {
     paddingLeft: 10,
@@ -336,5 +323,25 @@ const styles = StyleSheet.create({
 
 });
 
+function formatTimeString(timeString) {
+  // Create a Date object from the ISO string
+  const date = new Date(timeString);
+
+  // Define options for formatting
+  const options = {
+    weekday: 'long', // "long" is a valid value for weekday
+    year: 'numeric', // "numeric" is a valid value for year
+    month: 'long', // "long" is a valid value for month
+    day: 'numeric', // "numeric" is a valid value for day
+    hour: 'numeric', // "numeric" is a valid value for hour
+    minute: 'numeric', // "numeric" is a valid value for minute
+    // second: 'numeric', // "numeric" is a valid value for second
+    // timeZoneName: 'short' // "short" is a valid value for timeZoneName
+  };
+
+  // Format the date using the options
+  return date.toLocaleString('en-US', options);
+}
+
 // Export the component
-export default SearchItemCard;
+export default BlogItemCard;

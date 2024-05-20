@@ -2,9 +2,9 @@
 import { View, TextInput, FlatList, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getAccessToken } from '../components/auth';
+import { getAccessToken } from '../components/useAuth';
 import SearchItemCard from '../components/SearchItemCard';
-// import { HOST } from "@env";
+// const HOST = process.env.HOST;
 const HOST = process.env.HOST;
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
@@ -67,7 +67,7 @@ const SearchScreen = () => {
     if (searchQuery.length > 1) {
       console.log("\n\n=======SEARCH======\n");
       console.log("Performing search for:", searchQuery, " ...\n");
-      console.log("url:\n",SEARCH_API_URL,"\n");
+      console.log("url:\n", SEARCH_API_URL, "\n");
       try {
         const token = await getAccessToken();
         const response = await axios.get(SEARCH_API_URL, {
@@ -75,8 +75,7 @@ const SearchScreen = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPlantsData(response.data.data);
-        // console.log("Found ", response.data.data.length, " results!\n");
-        console.log(response);
+        console.log("Found ", response.data.data.length, " results!\n");
       } catch (error) {
         console.error('Error fetching plants:', error);
       }
@@ -90,9 +89,11 @@ const SearchScreen = () => {
   const gridRenderItem = ({ item }) => (
     <SearchItemCard
       itemID={item.id}
-      itemName={extractNameAndDescription(item)[0]}
-      itemImageUrl={item.image_url ? item.image_url : 'https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg'}
-      itemDescription={extractNameAndDescription(item)[1]} />
+      itemName={item.common_name}
+      itemImageUrl={'https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg'}
+      // itemImageUrl={item.default_image.small_url ? item.default_image.small_url:'https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg'}
+      itemDescription={item.scientific_name} />
+
   );
 
   return (

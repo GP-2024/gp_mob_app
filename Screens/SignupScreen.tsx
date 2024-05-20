@@ -12,7 +12,7 @@ import AppText from "../components/AppText";
 
 import Logo from "../assets/logo.svg";
 
-import { HOST } from "@env";
+const HOST = process.env.HOST;
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required().label("Username"),

@@ -15,7 +15,7 @@ import AppText from "../components/AppText";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import useAuth from '../components/useAuth';
 
-// import { HOST } from "@env";
+// const HOST = process.env.HOST;
 const HOST = process.env.HOST;
 
 
@@ -67,7 +67,7 @@ function logCurrentTime() {
 // };
 
 function LoginScreen(props) {
-    const { isLoggedIn, login, logout } = useAuth();
+    const { login, logout } = useAuth();
     const handleSubmit = async ({ emailOrUsername, password }) => {
         const isEmail = emailOrUsername.includes("@");
         const body = isEmail
