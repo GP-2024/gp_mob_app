@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text,ScrollView, View } from "react-native";
 import axios from "axios";
 
 import defaultStyles from "../config/styles";
@@ -41,6 +41,7 @@ function RegisterScreen(props) {
 
     return (
         <Screen style={styles.container}>
+            <ScrollView>
             <Logo width={100} height={100} style={styles.logo} />
             <AppText style={styles.title}>From Root To Bloom </AppText>
             <AppText style={styles.subTitle}>Create a new account</AppText>
@@ -89,6 +90,7 @@ function RegisterScreen(props) {
                     <Text style={styles.loginLink}>Login</Text>
                 </AppText>
             </AppForm>
+            </ScrollView>
         </Screen>
     );
 }

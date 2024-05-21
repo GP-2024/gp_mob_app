@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import axios from "axios";
 
 import defaultStyles from "../config/styles";
@@ -82,7 +82,7 @@ function LoginScreen(props) {
 
             console.log(response.data);
             // storeData(response.data);
-            login(response.data.tokens.access_token,response.data.tokens.refresh_token);
+            login(response.data.tokens.access_token, response.data.tokens.refresh_token);
         } catch (error) {
             console.log(body);
             console.log(error.response.data);
@@ -90,44 +90,46 @@ function LoginScreen(props) {
     };
     return (
         <Screen style={styles.container}>
-            <Logo width={100} height={100} style={styles.logo} />
-            <AppText style={styles.title}>From Root To Bloom </AppText>
-            <AppText style={styles.subTitle}>Login to your account</AppText>
-            <AppForm
-                initialValues={{ emailOrUsername: "", password: "" }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-            >
-                <AppFormField
-                    autoCapitalize="none"
-                    placeholder="Email or Username"
-                    textContentType="username"
-                    icon="account"
-                    autoCorrect={false}
-                    name="emailOrUsername"
-                />
-                <AppFormField
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    textContentType="password"
-                    icon="lock"
-                    autoCorrect={false}
-                    secureTextEntry={true}
-                    name="password"
-                />
-                <Text style={styles.forgotPassword}>Forgot Password?</Text>
-
-                <View
-                    style={{ alignItems: "center", justifyContent: "center" }}
+            <ScrollView>
+                <Logo width={100} height={100} style={styles.logo} />
+                <AppText style={styles.title}>From Root To Bloom </AppText>
+                <AppText style={styles.subTitle}>Login to your account</AppText>
+                <AppForm
+                    initialValues={{ emailOrUsername: "", password: "" }}
+                    onSubmit={handleSubmit}
+                    validationSchema={validationSchema}
                 >
-                    <SubmitButton title="Login" />
-                </View>
+                    <AppFormField
+                        autoCapitalize="none"
+                        placeholder="Email or Username"
+                        textContentType="username"
+                        icon="account"
+                        autoCorrect={false}
+                        name="emailOrUsername"
+                    />
+                    <AppFormField
+                        autoCapitalize="none"
+                        placeholder="Password"
+                        textContentType="password"
+                        icon="lock"
+                        autoCorrect={false}
+                        secureTextEntry={true}
+                        name="password"
+                    />
+                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
 
-                <AppText style={styles.signup}>
-                    Don't have an account?{" "}
-                    <Text style={styles.signupLink}>Sign up</Text>
-                </AppText>
-            </AppForm>
+                    <View
+                        style={{ alignItems: "center", justifyContent: "center" }}
+                    >
+                        <SubmitButton title="Login" />
+                    </View>
+
+                    <AppText style={styles.signup}>
+                        Don't have an account?{" "}
+                        <Text style={styles.signupLink}>Sign up</Text>
+                    </AppText>
+                </AppForm>
+            </ScrollView>
         </Screen>
     );
 }
