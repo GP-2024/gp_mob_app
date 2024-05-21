@@ -141,7 +141,7 @@ const BlogsScreen = ({ navigation }) => {
         console.error('Error fetcing blogs:', error);
       });
 
-    }, 15000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [])
@@ -274,8 +274,6 @@ const BlogsScreen = ({ navigation }) => {
               ref={scrViewRef}
             >
               <NewBlogItemCard
-                setBlogsData={setBlogsData}
-                getAllBlogPosts={getAllBlogPosts}
               />
               <FlatList
                 data={sortBlogsByDate(blogsData)}
