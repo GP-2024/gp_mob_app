@@ -42,7 +42,9 @@ export const createNewBlogPost = async (title, content) => {
     };
 
     const response = await axios.post(`${HOST}/blogs/new-post`, data, config);
+    console.log('Blog post created successfully:');
     console.log(response.data);
+    
     return response.data;
   } catch (error) {
     console.error('Error creating new blog post:', error);
@@ -113,7 +115,6 @@ const NewBlogItemCard = () => {
                 // If both title and body are not empty, create the blog post
                 try {
                   createNewBlogPost(blogTitle, blogBody);
-                  console.log('Blog post created successfully:');
                 } catch (error) {
                   console.error('Error creating blog post:', error);
                 }

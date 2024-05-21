@@ -48,11 +48,7 @@ const useAuth = () => {
 
   const AUTH_TOKEN_EXPIRATION_MINUTES = 14;
   const REFRESH_TOKEN_EXPIRATION_DAYS = 7;
-  
-  useEffect(() => {
-    const interval = setInterval(checkTokensAndActUponIt, 3000); // Refresh token every 14 minutes
-    return () => clearInterval(interval);
-  }, []);
+
 
   // useEffect(() => {
   //   // Define the function inside useEffect to have access to updated state and props
@@ -92,39 +88,14 @@ const useAuth = () => {
   // }, []); // Empty dependency array ensures this effect runs only once on mount
   
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      const { authToken, authTokenTimestamp, refreshToken, refreshTokenTimestamp } = await getStoredTokens();
-
-      if (!authToken || !authTokenTimestamp || !refreshToken || !refreshTokenTimestamp) {
-        setIsLoggedIn(false);
-        return;
-      }
-
-      const authTokenGeneratedTime = new Date(authTokenTimestamp);
-      const refreshTokenGeneratedTime = new Date(refreshTokenTimestamp);
-
-      const authTokenAge = getMinutesSince(authTokenGeneratedTime); // in minutes
-      const refreshTokenAge = getDaysSince(refreshTokenGeneratedTime); // in days
-
-      if (refreshTokenAge >= REFRESH_TOKEN_EXPIRATION_DAYS || authTokenAge >= AUTH_TOKEN_EXPIRATION_MINUTES) {
-        await checkTokensAndActUponIt();
-      }
-
-      // Re-check tokens after attempting to refresh them
-      const { authToken: newAuthToken } = await getStoredTokens();
-      setIsLoggedIn(!!newAuthToken);
-    };
-
-    checkLoginStatus();
-  }, []);
-
   const login = async (accessToken, refreshToken) => {
     storeTokens(accessToken, refreshToken);
     setIsLoggedIn(true);
   };
 
   const logout = async () => {
+    console.log("logging out...");
+    console.log(this);
     clearTokens();
     setIsLoggedIn(false);
 
@@ -185,12 +156,16 @@ const useAuth = () => {
 
 
 export const checkTokensAndActUponIt = async () => {
+  console.log("==========");
+  logCurrentTime();
+  console.log("A");
   const {  logout } = useAuth();
   const AUTH_TOKEN_EXPIRATION_MINUTES = 14;
   const REFRESH_TOKEN_EXPIRATION_DAYS = 7;
   const { authToken, refreshToken, authTokenTimestamp, refreshTokenTimestamp } = await getStoredTokens();
 
   if (!authToken || !refreshToken || !authTokenTimestamp || !refreshTokenTimestamp) {
+    console.log("B");
     return;
   }
 
@@ -201,21 +176,23 @@ export const checkTokensAndActUponIt = async () => {
   const refreshTokenAge = getDaysSince(refreshTokenGeneratedTime); // in days
 
   if (refreshTokenAge >= REFRESH_TOKEN_EXPIRATION_DAYS) {
+    console.log("C");
     await logout();
     return;
   }
 
   if (authTokenAge >= AUTH_TOKEN_EXPIRATION_MINUTES) {
+    console.log("D");
     await requestNewTokens(refreshToken);
   }
   logCurrentTime();
-  console.log("Periodic Token Check ✅")
+  console.log("Periodic Token Check");
+  console.log("==========");
 };
 
 
 
 export const getAccessToken = async () => {
-  checkTokensAndActUponIt();
   const { authToken } = await getStoredTokens();
   return authToken;
 };

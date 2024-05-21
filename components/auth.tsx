@@ -37,6 +37,7 @@ function logCurrentTime() {
 }
 
 export const requestNewTokens = async (refreshToken) => {
+  console.log(refreshToken);
   const TOKEN_REFRESH_ENDPOINT = `${HOST}/auth/local/refresh`
   try {
     const response = await axios.post(

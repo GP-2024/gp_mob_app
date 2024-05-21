@@ -28,7 +28,7 @@ const heightFactor = 0.09;
 
 
 
-var blogs = [
+var blogs1 = [
   {
     "id": "bff11d30-a7e7-49ab-bd38-3bbc921c3836",
     "updatedAt": "2024-05-16T02:13:41.464Z",
@@ -101,7 +101,7 @@ function truncateString(str) {
 }
 
 
-function writingModeFocus(scrViewRef,toast) {
+function writingModeFocus(scrViewRef, toast) {
   scrViewRef.current?.scrollTo({
     y: 0,
     animated: true,
@@ -114,11 +114,12 @@ function writingModeFocus(scrViewRef,toast) {
   });
 }
 
-
 const BlogsScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [plantsData, setPlantsData] = useState([]);
+  const [blogsData, setBlogsData] = useState([]);
   const [timer, setTimer] = useState(null);
+
+
 
   const appCxt = useContext(appContext);
   const inWritingMode = appCxt.inWritingMode;
@@ -130,16 +131,38 @@ const BlogsScreen = ({ navigation }) => {
   const scrViewRef = React.useRef();
   const toast = useToast();
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+
+      getAllBlogPosts(1).then(blogs => {
+        // console.log(plants);
+        setBlogsData(blogs);
+      }).catch(error => {
+        console.error('Error fetcing blogs:', error);
+      });
+
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [])
 
 
   useFocusEffect(
     useCallback(() => {
       // This code runs when the screen is focused
-      // console.log('BlogsScreen focused',inWritingMode);
+      console.log('BlogsScreen focused');
+
+      getAllBlogPosts(1).then(blogs => {
+        // console.log(plants);
+        setBlogsData(blogs);
+      }).catch(error => {
+        console.error('Error fetcing blogs:', error);
+      });
+
       if (inWritingMode === true) {
         setShowWritingModeIndicator(true);
-        writingModeFocus(scrViewRef,toast);
-        setPlantsData()
+        writingModeFocus(scrViewRef, toast);
+        // setPlantsData()
       } else {
         setShowWritingModeIndicator(false);
         toast.hideAll();
@@ -153,26 +176,6 @@ const BlogsScreen = ({ navigation }) => {
       };
     }, [])
   );
-
-
-
-
-  // const [blogs, setBlogs] = useState([]);
-
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     // The screen is focused
-  //     // Call any action and update data
-  //     getAllBlogPosts(1).then(posts => {
-  //       // console.log(plants);
-  //       setBlogs(posts);
-  //     }).catch(error => {
-  //       console.error('Error ftching posts:', error);
-  //     });
-  //   });
-  //   // Return the function to unsubscribe from the event so it gets removed on unmount
-  //   return unsubscribe;
-  // }, [navigation]);
 
 
   useEffect(() => {
@@ -196,7 +199,7 @@ const BlogsScreen = ({ navigation }) => {
           params: { q: searchQuery },
           headers: { Authorization: `Bearer ${token}` },
         });
-        setPlantsData(response.data.data);
+        setBlogsData(response.data.data);
         console.log("Found ", response.data.data.length, "results!\n");
         // console.log(response.data);
         // console.log(response.data.data[0]["default_image"].small_url);
@@ -223,15 +226,15 @@ const BlogsScreen = ({ navigation }) => {
   );
 
   const NewPostButton = () => {
-    
+
     return (
       <Pressable
         onPress={() => {
           if (inWritingMode === false) {
             setInWritingMode(true);
             setShowWritingModeIndicator(true);
-            writingModeFocus(scrViewRef,toast);
-            
+            writingModeFocus(scrViewRef, toast);
+
           } else {
             setInWritingMode(false);
             setShowWritingModeIndicator(false);
@@ -270,9 +273,12 @@ const BlogsScreen = ({ navigation }) => {
             <ScrollView
               ref={scrViewRef}
             >
-              <NewBlogItemCard />
+              <NewBlogItemCard
+                setBlogsData={setBlogsData}
+                getAllBlogPosts={getAllBlogPosts}
+              />
               <FlatList
-                data={sortBlogsByDate(blogs)}
+                data={sortBlogsByDate(blogsData)}
                 renderItem={gridRenderItem}
                 keyExtractor={(item) => item.id}
                 numColumns={1}
@@ -284,7 +290,7 @@ const BlogsScreen = ({ navigation }) => {
           :
           <>
             <FlatList
-              data={sortBlogsByDate(blogs)}
+              data={sortBlogsByDate(blogsData)}
               renderItem={gridRenderItem}
               keyExtractor={(item) => item.id}
               numColumns={1}
@@ -333,6 +339,7 @@ export const createNewBlogPost = async (title, content) => {
 
 const getAllBlogPosts = async (page) => {
   try {
+    console.log("attempting to fetch blogs");
     const token = await getAccessToken();
     if (!token) {
       throw new Error('Access token not found');
@@ -346,8 +353,10 @@ const getAllBlogPosts = async (page) => {
         page: page,
       },
     });
-
+    console.log("blogs fetched!");
+    console.log(response.data);
     return response.data;
+    
   } catch (error) {
     console.error('Error fetching blog posts:', error);
     throw error;

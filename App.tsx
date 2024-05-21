@@ -30,8 +30,8 @@ function logCurrentTime() {
     const hours = currentDate.getHours();
     const minutes = currentDate.getMinutes();
     const seconds = Math.round(currentDate.getSeconds()); // Round seconds
-
     console.log(`Current time: ${hours}:${minutes}:${seconds}`);
+
 }
 
 
@@ -48,21 +48,25 @@ export const appContext = createContext({
 });
 
 
-
 export default function App() {
     // console.log("Code ran!");
-
-    useEffect(() => {
-        const interval = setInterval(checkTokensAndActUponIt, 3000); // Refresh token every 14 minutes
-        return () => clearInterval(interval);
-    }, []);
-
-
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [inWritingMode, setInWritingMode] = useState(false);
     const [showWritingModeIndicator, setShowWritingModeIndicator] = useState(false);
 
-    logCurrentTime();
+    const MINUTE_MS = 30000;
+
+    console.log("logged?:",isLoggedIn);
+    useEffect(() => {
+        const interval = setInterval(() => {
+                checkTokensAndActUponIt();
+        }, MINUTE_MS);
+
+        return () => clearInterval(interval);
+    }, [])
+
+
+
 
     // console.log("******");
 
