@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text,ScrollView, View } from "react-native";
+import { StyleSheet, Text,ScrollView, View, Alert } from "react-native";
 import axios from "axios";
 
 import defaultStyles from "../config/styles";
@@ -28,8 +28,12 @@ function RegisterScreen(props) {
                 `${HOST}/auth/local/signup`,
                 values
             );
-            console.log("trial...");
+            console.log("signed up success...");
             console.log(response);
+            Alert.alert(
+                "",
+                "Account successfully registered!\nYou can now sign in."
+            );
         } catch (error) {
             console.log("====CATCH====")
             console.log(`${HOST}/auth/local/signup`);
