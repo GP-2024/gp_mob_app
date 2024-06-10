@@ -80,18 +80,18 @@ var blogs1 = [
 ]
 
 
-function sortBlogsByDate(blogs) {
-  blogs.sort((a, b) => {
-    if (a.createdAt > b.createdAt) {
-      return -1;
-    }
-    if (a.createdAt < b.createdAt) {
-      return 1;
-    }
-    return 0;
-  });
-  return blogs;
-}
+// function sortBlogsByDate(blogs) {
+//   blogs.sort((a, b) => {
+//     if (a.createdAt > b.createdAt) {
+//       return -1;
+//     }
+//     if (a.createdAt < b.createdAt) {
+//       return 1;
+//     }
+//     return 0;
+//   });
+//   return blogs;
+// }
 function truncateString(str) {
   if (str.length > 150) {
     return str.substring(0, 150) + "...";
@@ -276,7 +276,7 @@ const BlogsScreen = ({ navigation }) => {
               <NewBlogItemCard
               />
               <FlatList
-                data={sortBlogsByDate(blogsData)}
+                data={blogsData}
                 renderItem={gridRenderItem}
                 keyExtractor={(item) => item.id}
                 numColumns={1}
@@ -288,7 +288,7 @@ const BlogsScreen = ({ navigation }) => {
           :
           <>
             <FlatList
-              data={sortBlogsByDate(blogsData)}
+              data={blogsData}
               renderItem={gridRenderItem}
               keyExtractor={(item) => item.id}
               numColumns={1}
