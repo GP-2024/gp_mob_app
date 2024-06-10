@@ -255,8 +255,8 @@ import Icon from "react-native-vector-icons/FontAwesome6";
 import { NavigationScreenProps } from "react-navigation";
 import SignupScreen from "./SignupScreen";
 import ItemCard from "../components/ItemCard";
-import { getAccessToken } from '../components/useAuth';
-import axios from 'axios';
+import { getAccessToken } from "../components/useAuth";
+import axios from "axios";
 const HOST = process.env.HOST;
 
 import { Colors } from "react-native/Libraries/NewAppScreen";
@@ -302,7 +302,8 @@ const plantsData = [
 
 function getDescription(item) {
     item = item.Plant;
-    const scientificName = item.scientific_name.length > 0 ? item.scientific_name[0] : 'N/A';
+    const scientificName =
+        item.scientific_name.length > 0 ? item.scientific_name[0] : "N/A";
     let description = `• Scientific Name:\n${scientificName}\n`;
 
     if (item.family !== null) {
@@ -316,13 +317,14 @@ function getDescription(item) {
     return description.trim(); // Remove trailing whitespace
 }
 
-
 const gridRenderItem = ({ item }) => (
     <ItemCard
         itemName={item.Plant.common_name}
-        // itemImageUrl={item.itemImageUrl}
-        itemImageUrl={ 'https://i.postimg.cc/P58dnS0W/default-Plant-Image.jpg'}
-
+        itemImageUrl={
+            item.Plant.default_image
+                ? item.Plant.default_image.original_url
+                : "https://i.postimg.cc/P58dnS0W/default-Plant-Image.jpg"
+        }
         itemDescription={getDescription(item)}
     />
 );
@@ -332,12 +334,11 @@ const fetchMyPlants = async () => {
         const accessToken = await getAccessToken();
         const response = await axios.get(`${HOST}/my-plants`, {
             headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
+                Authorization: `Bearer ${accessToken}`,
+            },
         });
-        console.log("Plants in my collection:", response.data.total, "plant\/s");
+        console.log("Plants in my collection:", response.data.total, "plant/s");
         return response.data.plants;
-
     } catch (error) {
         throw error;
     }
@@ -348,21 +349,26 @@ const MyPlants = ({ navigation }) => {
     const [myPlants, setMyPlants] = useState([]);
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+        const fetchPlants = async () => {
+            try {
+                const plants = await fetchMyPlants();
+                setMyPlants(plants);
+            } catch (error) {
+                console.error("Error fetching my plants:", error);
+            }
+        };
+
+        fetchPlants();
+
+        const unsubscribe = navigation.addListener("focus", () => {
             // The screen is focused
             // Call any action and update data
-            fetchMyPlants().then(plants => {
-                // console.log(plants);
-                setMyPlants(plants);
-            }).catch(error => {
-                console.error('Error ftching my plants:', error);
-            });
+            fetchPlants();
         });
 
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return unsubscribe;
     }, [navigation]);
-
 
     return (
         <SafeAreaView style={styles.outerContainer}>
