@@ -353,7 +353,7 @@ const getAllBlogPosts = async (page) => {
     });
     console.log("blogs fetched!");
     console.log(response.data);
-    return response.data;
+    return response.data.posts;
     
   } catch (error) {
     console.error('Error fetching blog posts:', error);
