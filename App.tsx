@@ -206,7 +206,7 @@ export default function App() {
                                         >
                                             <MaterialIcons
                                                 name="arrow-forward"
-                                                size={25}
+                                                size={30}
                                                 color={
                                                     defaultStyles.colors.primary
                                                 }
@@ -221,7 +221,7 @@ export default function App() {
                                         >
                                             <MaterialIcons
                                                 name="person-add"
-                                                size={25}
+                                                size={30}
                                                 color={
                                                     defaultStyles.colors.primary
                                                 }
