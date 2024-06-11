@@ -382,17 +382,6 @@ const MyPlants = ({ navigation }) => {
     );
 };
 
-// h1            47.78px
-// h2            39.81px
-// h3            33.18px
-// h4            27.65px
-// h5            23.04px
-// h6            19.2px
-// p            16px
-// small        13.33px
-// smaller        11.11px
-
-// Define styles using StyleSheet
 const styles = StyleSheet.create({
     outerContainer: {
         flex: 1,
@@ -401,8 +390,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         paddingVertical: 19,
 
-        // borderWidth: 1,
-        // borderColor: 'black',
         margin: 3,
     },
     topBanner: {
@@ -410,86 +397,50 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingBottom: 40,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     topTitleContainer: {
         flex: 1,
         alignItems: "flex-start",
         justifyContent: "center",
         paddingBottom: 10,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     secondaryTitleContainer: {
         flex: 1,
         alignItems: "flex-start",
         justifyContent: "center",
         paddingBottom: 5,
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     inputContainer: {
         flex: 1,
         alignItems: "stretch",
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     sideButtonContainer: {
         flex: 0.5,
         alignItems: "flex-end",
         justifyContent: "flex-start",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     buttonContainer: {
         flex: 1,
         alignItems: "stretch",
         justifyContent: "center",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     horizContainer: {
         flex: 0.6,
         flexDirection: "row",
         alignItems: "stretch",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     centerContainer: {
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-
-        // borderWidth: 1,
-        // borderColor: 'red',
-        // margin: 3,
     },
     buttonContainerStyle: {
-        // flex: 200, heree
-        // borderWidth: 1,
-        // borderColor: 'red',
         alignItems: "center",
         justifyContent: "center",
     },
     separatorContainerStyle: {
         flex: 1,
-        // borderWidth: 1,
-        // borderColor: 'red',
         backgroundColor: "black",
     },
     indentificationButtonStyle: {
