@@ -20,7 +20,7 @@ const widthFactor = 0.88;
 const heightFactor = 0.2;
 
 // Define the BlogItemCard component
-const BlogItemCard = ({ itemName, itemDescription, itemID, itemDate }) => {
+const BlogItemCard = ({ itemName, itemDescription, itemID, itemDate, itemAuthor, itemNOfComments, itemNOfLikes, itemIsLiked = true }) => {
   const [expanded, setExpanded] = useState(false);
   function logCurrentTime() {
     const currentDate = new Date();
@@ -51,12 +51,30 @@ const BlogItemCard = ({ itemName, itemDescription, itemID, itemDate }) => {
         <View style={styles.cardContent}>
 
           <View style={styles.cardContentContainer}>
-          <Text style={{fontSize:12,}}>{formatTimeString(itemDate)}</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{itemAuthor}</Text>
+            <Text style={{ fontSize: 12, }}>{formatTimeString(itemDate)}</Text>
             <Text style={styles.h4}>{itemName}</Text>
 
             <Text style={styles.valueStyle}>{expanded ?
               itemDescription : truncateString(itemDescription)}
             </Text>
+            <View style={styles.metaDataContainerStyle}>
+
+              <View style={styles.likesIndicator}>
+                <Icon name={'thumbs-up'} size={13} color="black" />
+                <Text style={{ fontSize: 15, }} > {itemNOfLikes}</Text>
+              </View>
+
+              <View style={styles.likesIndicator}>
+                <Icon name={'comment'} size={13} color="black" />
+                <Text style={{ fontSize: 15, }} > {itemNOfComments} </Text>
+              </View>
+
+
+
+
+
+            </View>
           </View>
 
           <View style={styles.addButtonOuterContainer}>
@@ -169,6 +187,16 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 200 / 10,
     borderBottomLeftRadius: 200 / 10,
     // alignSelf:'flex-start'
+  },
+  metaDataContainerStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    paddingTop: 7,
+  },
+  likesIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
   },
   // outerContainer: {
   //   flex: 1,

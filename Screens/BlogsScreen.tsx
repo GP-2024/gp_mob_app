@@ -178,45 +178,15 @@ const BlogsScreen = ({ navigation }) => {
   );
 
 
-  useEffect(() => {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    const searchTimer = setTimeout(() => {
-      performSearch();
-    }, 3000);
-    setTimer(searchTimer);
-  }, [searchQuery]);
 
-  const performSearch = async () => {
-    if (searchQuery.length > 1) {
-      console.log("\n\n=======SEARCH======\n");
-      console.log("Performing search for:", searchQuery, " ...\n");
-      console.log("url:\n", SEARCH_API_URL, "\n");
-      try {
-        const token = await getAccessToken();
-        const response = await axios.get(SEARCH_API_URL, {
-          params: { q: searchQuery },
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setBlogsData(response.data.data);
-        console.log("Found ", response.data.data.length, "results!\n");
-        // console.log(response.data);
-        // console.log(response.data.data[0]["default_image"].small_url);
-      } catch (error) {
-        console.error('Error fetching plants:', error);
-      }
-      console.log("=============\n\n");
-    } else {
-      console.log("not performing search because query length not greater than 1..");
-
-    }
-  };
 
   const gridRenderItem = ({ item }) => (
     <BlogItemCard
       itemID={item.id}
       itemName={item.title}
+      itemAuthor={item.createdBy}
+      itemNOfLikes={item.numOfLikes}
+      itemNOfComments={item.numOfComments}
       // itemImageUrl={extractPicURL(item)}
       // itemImageUrl={ 'https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg'}
       // itemImageUrl={ item.Plant.default_image.small_url}
