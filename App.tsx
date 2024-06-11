@@ -2,9 +2,9 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState, useEffect, useContext, createContext } from 'react';
+import { useState, useEffect, useContext, createContext } from "react";
 
-import { ToastProvider } from 'react-native-toast-notifications'
+import { ToastProvider } from "react-native-toast-notifications";
 
 import SignupScreen from "./Screens/SignupScreen";
 import LoginScreen from "./Screens/LoginScreen";
@@ -14,16 +14,16 @@ import MyPlants from "./Screens/MyPlantsScreen";
 import SearchScreen from "./Screens/SearchScreen";
 import BlogsScreen from "./Screens/BlogsScreen";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import defaultStyles from "./config/styles";
 
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from "react-native-loading-spinner-overlay";
 
-import useAuth from './components/useAuth';
-import { storeTokens, clearTokens } from './components/auth';
-import { checkTokensAndActUponIt } from './components/useAuth';
+import useAuth from "./components/useAuth";
+import { storeTokens, clearTokens } from "./components/auth";
+import { checkTokensAndActUponIt } from "./components/useAuth";
 
 function logCurrentTime() {
     const currentDate = new Date();
@@ -31,42 +31,36 @@ function logCurrentTime() {
     const minutes = currentDate.getMinutes();
     const seconds = Math.round(currentDate.getSeconds()); // Round seconds
     console.log(`Current time: ${hours}:${minutes}:${seconds}`);
-
 }
-
 
 const Tab = createBottomTabNavigator();
 
-
 export const appContext = createContext({
-    'isLoggedIn': null,
-    'setIsLoggedIn': null,
-    'inWritingMode': null,
-    'setInWritingMode': null,
-    'showWritingModeIndicator': null,
-    'setShowWritingModeIndicator': null,
+    isLoggedIn: null,
+    setIsLoggedIn: null,
+    inWritingMode: null,
+    setInWritingMode: null,
+    showWritingModeIndicator: null,
+    setShowWritingModeIndicator: null,
 });
-
 
 export default function App() {
     // console.log("Code ran!");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [inWritingMode, setInWritingMode] = useState(false);
-    const [showWritingModeIndicator, setShowWritingModeIndicator] = useState(false);
+    const [showWritingModeIndicator, setShowWritingModeIndicator] =
+        useState(false);
 
     const MINUTE_MS = 30000;
 
-    console.log("logged?:",isLoggedIn);
+    console.log("logged?:", isLoggedIn);
     useEffect(() => {
         const interval = setInterval(() => {
-                checkTokensAndActUponIt();
+            checkTokensAndActUponIt();
         }, MINUTE_MS);
 
         return () => clearInterval(interval);
-    }, [])
-
-
-
+    }, []);
 
     // console.log("******");
 
@@ -75,13 +69,14 @@ export default function App() {
         <ToastProvider>
             <appContext.Provider
                 value={{
-                    'isLoggedIn': isLoggedIn,
-                    'setIsLoggedIn': setIsLoggedIn,
-                    'inWritingMode': inWritingMode,
-                    'setInWritingMode': setInWritingMode,
-                    'showWritingModeIndicator': showWritingModeIndicator,
-                    'setShowWritingModeIndicator': setShowWritingModeIndicator,
-                }}>
+                    isLoggedIn: isLoggedIn,
+                    setIsLoggedIn: setIsLoggedIn,
+                    inWritingMode: inWritingMode,
+                    setInWritingMode: setInWritingMode,
+                    showWritingModeIndicator: showWritingModeIndicator,
+                    setShowWritingModeIndicator: setShowWritingModeIndicator,
+                }}
+            >
                 <NavigationContainer>
                     <Tab.Navigator
                         screenOptions={({ route }) => ({
@@ -100,13 +95,12 @@ export default function App() {
                                     iconName = "nature";
                                 }
 
-                                // Don't show icon for Scan tab.
                                 if (route.name === "Scan") return null;
 
                                 return (
                                     <MaterialIcons
                                         name={iconName}
-                                        size={25}
+                                        size={50}
                                         color={defaultStyles.colors.primary}
                                     />
                                 );
@@ -120,105 +114,159 @@ export default function App() {
                                     flexDirection: "row",
                                     justifyContent: "space-around",
                                     alignItems: "center",
+                                    marginBottom: 10,
                                 }}
                             >
-                                {isLoggedIn ?
+                                {isLoggedIn ? (
                                     <>
                                         <TouchableOpacity
-                                            onPress={() => props.navigation.navigate("Blogs")}
+                                            onPress={() =>
+                                                props.navigation.navigate(
+                                                    "Blogs"
+                                                )
+                                            }
                                         >
                                             <MaterialIcons
                                                 name="notes"
-                                                size={25}
-                                                color={defaultStyles.colors.primary}
+                                                size={30}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            onPress={() => props.navigation.navigate("Profile")}
+                                            onPress={() =>
+                                                props.navigation.navigate(
+                                                    "Profile"
+                                                )
+                                            }
                                         >
                                             <MaterialIcons
                                                 name="person"
-                                                size={25}
-                                                color={defaultStyles.colors.primary}
+                                                size={30}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            onPress={() => props.navigation.navigate("Scan")}
+                                            onPress={() =>
+                                                props.navigation.navigate(
+                                                    "Scan"
+                                                )
+                                            }
                                         >
                                             <MaterialIcons
                                                 name="camera"
                                                 size={50}
-                                                color={defaultStyles.colors.primary}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
                                             onPress={() =>
-                                                props.navigation.navigate("My Plants")
+                                                props.navigation.navigate(
+                                                    "My Plants"
+                                                )
                                             }
                                         >
                                             <MaterialIcons
                                                 name="nature"
-                                                size={25}
-                                                color={defaultStyles.colors.primary}
+                                                size={30}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
                                             onPress={() =>
-                                                props.navigation.navigate("Search")
+                                                props.navigation.navigate(
+                                                    "Search"
+                                                )
                                             }
                                         >
                                             <MaterialIcons
                                                 name="search"
-                                                size={25}
-                                                color={defaultStyles.colors.primary}
+                                                size={30}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
-
                                     </>
-                                    :
+                                ) : (
                                     <>
                                         <TouchableOpacity
-                                            onPress={() => props.navigation.navigate("Login")}
+                                            onPress={() =>
+                                                props.navigation.navigate(
+                                                    "Login"
+                                                )
+                                            }
                                         >
                                             <MaterialIcons
                                                 name="arrow-forward"
                                                 size={25}
-                                                color={defaultStyles.colors.primary}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            onPress={() => props.navigation.navigate("Sign Up")}
+                                            onPress={() =>
+                                                props.navigation.navigate(
+                                                    "Sign Up"
+                                                )
+                                            }
                                         >
                                             <MaterialIcons
                                                 name="person-add"
                                                 size={25}
-                                                color={defaultStyles.colors.primary}
+                                                color={
+                                                    defaultStyles.colors.primary
+                                                }
                                             />
                                         </TouchableOpacity>
                                     </>
-                                }
-
+                                )}
                             </View>
                         )}
                     >
-
-                        {isLoggedIn ?
+                        {isLoggedIn ? (
                             <>
-                                <Tab.Screen name="Blogs" component={BlogsScreen} />
-                                <Tab.Screen name="Profile" component={ProfileScreen} />
-                                <Tab.Screen name="Scan" component={ScanningScreen} />
-                                <Tab.Screen name="My Plants" component={MyPlants} />
-                                <Tab.Screen name="Search" component={SearchScreen} />
+                                <Tab.Screen
+                                    name="Blogs"
+                                    component={BlogsScreen}
+                                />
+                                <Tab.Screen
+                                    name="Profile"
+                                    component={ProfileScreen}
+                                />
+                                <Tab.Screen
+                                    name="Scan"
+                                    component={ScanningScreen}
+                                />
+                                <Tab.Screen
+                                    name="My Plants"
+                                    component={MyPlants}
+                                />
+                                <Tab.Screen
+                                    name="Search"
+                                    component={SearchScreen}
+                                />
                             </>
-                            :
+                        ) : (
                             <>
-                                <Tab.Screen name="Login" component={LoginScreen} />
-                                <Tab.Screen name="Sign Up" component={SignupScreen} />
+                                <Tab.Screen
+                                    name="Login"
+                                    component={LoginScreen}
+                                />
+                                <Tab.Screen
+                                    name="Sign Up"
+                                    component={SignupScreen}
+                                />
                             </>
-                        }
-
-
-
+                        )}
                     </Tab.Navigator>
                 </NavigationContainer>
             </appContext.Provider>
