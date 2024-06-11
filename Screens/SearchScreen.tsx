@@ -105,6 +105,7 @@ const SearchScreen = () => {
                     : "https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg"
             }
             itemDescription={item.scientific_name}
+            isAdded={item.isAdded}
         />
     );
 
