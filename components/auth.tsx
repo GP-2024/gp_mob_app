@@ -86,29 +86,6 @@ export const clearTokens = async () => {
 };
 
 
-
-// export const getAccessToken = async () => {
-//   try {
-//     return await AsyncStorage.getItem('accessToken');
-//   } catch (error) {
-//     console.error('Error getting access token:', error);
-//     return null;
-//   }
-// };
-
-// export const getRefreshToken = async () => {
-//   try {
-//     return await AsyncStorage.getItem('refreshToken');
-//   } catch (error) {
-//     console.error('Error getting refresh token:', error);
-//     return null;
-//   }
-// };
-
-/////////////////
-
-
-
 export const addPlantToCollection = async (plantID, authToken) => {
   const url = `${HOST}/my-plants`;
   const config = {

@@ -25,7 +25,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 
 import useAuth from "./components/useAuth";
 import { storeTokens, clearTokens } from "./components/auth";
-import { checkTokensAndActUponIt } from "./components/useAuth";
+import { checkTokensAndActUponIt, getAccessToken } from "./components/useAuth";
 
 function logCurrentTime() {
     const currentDate = new Date();
@@ -63,6 +63,19 @@ export default function App() {
 
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        const checkAccessToken = async () => {
+          const token = await getAccessToken();
+          if (token === -1) {
+            setIsLoggedIn(false);
+          } else {
+            setIsLoggedIn(true);
+          }
+        };
+    
+        checkAccessToken();
+      }, []);
 
     // console.log("******");
 

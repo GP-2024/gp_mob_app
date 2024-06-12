@@ -49,43 +49,6 @@ const useAuth = () => {
   const AUTH_TOKEN_EXPIRATION_MINUTES = 14;
   const REFRESH_TOKEN_EXPIRATION_DAYS = 7;
 
-
-  // useEffect(() => {
-  //   // Define the function inside useEffect to have access to updated state and props
-  //   const checkTokensAndActUponIt = async () => {
-  //     const { logout } = useAuth();
-  //     const AUTH_TOKEN_EXPIRATION_MINUTES = 14;
-  //     const REFRESH_TOKEN_EXPIRATION_DAYS = 7;
-  //     const { authToken, refreshToken, authTokenTimestamp, refreshTokenTimestamp } = await getStoredTokens();
-  
-  //     if (!authToken || !refreshToken || !authTokenTimestamp || !refreshTokenTimestamp) {
-  //       return;
-  //     }
-  
-  //     const authTokenGeneratedTime = new Date(authTokenTimestamp);
-  //     const refreshTokenGeneratedTime = new Date(refreshTokenTimestamp);
-  
-  //     const authTokenAge = getMinutesSince(authTokenGeneratedTime); // in minutes
-  //     const refreshTokenAge = getDaysSince(refreshTokenGeneratedTime); // in days
-  
-  //     if (refreshTokenAge >= REFRESH_TOKEN_EXPIRATION_DAYS) {
-  //       await logout();
-  //       return;
-  //     }
-  
-  //     if (authTokenAge >= AUTH_TOKEN_EXPIRATION_MINUTES) {
-  //       await requestNewTokens(refreshToken);
-  //     }
-  //     logCurrentTime();
-  //     console.log("Periodic Token Check ✅")
-  //   };
-  
-  //   // Set the interval to call the function every 30 seconds
-  //   const intervalId = setInterval(checkTokensAndActUponIt, 30000);
-  
-  //   // Clear the interval on component unmount
-  //   return () => clearInterval(intervalId);
-  // }, []); // Empty dependency array ensures this effect runs only once on mount
   
 
   const login = async (accessToken, refreshToken) => {
@@ -102,65 +65,17 @@ const useAuth = () => {
   };
 
 
-
-  // // Function to refresh token
-  // const refreshToken = async () => {
-  //   const refresh_token = await getRefreshToken();
-  //   if (!refresh_token) {
-  //     // Handle scenario when refresh token is not available
-  //     console.log("No refresh token available. Logging out.");
-  //     logout();
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post(
-  //       TOKEN_REFRESH_ENDPOINT,
-  //       { refresh_token: refresh_token },
-  //       {
-  //         headers: {
-  //           'Authorization': `Bearer ${refresh_token}`,
-  //           'Content-Type': 'application/json',
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status !== 200) {
-  //       // Handle error response from server
-  //       console.error('Failed to refresh token:', response.statusText);
-  //       logout();
-  //       return;
-  //     }
-
-  //     console.log("\n\n\n\n");
-  //     logCurrentTime();
-  //     console.log(" TOKENS REFRESHED SUCCESSFULLY YAAAY!\n\n\n\n");
-  //     const newAccessToken = response.data.access_token;
-  //     const newRefreshToken = response.data.refresh_token;
-  //     storeTokens(newAccessToken, newRefreshToken);
-  //   } catch (error) {
-  //     console.error('Error refreshing token:', error);
-  //     logout();
-  //   }
-  // };
-
-  // // Function to periodically refresh token
-  // useEffect(() => {
-  //   const interval = setInterval(refreshToken, 14 * 60 * 1000); // Refresh token every 14 minutes
-  //   return () => clearInterval(interval);
-  // }, []);
-
   return { login, logout };
 };
 
-
+const AUTH_TOKEN_EXPIRATION_MINUTES = 500;
 
 export const checkTokensAndActUponIt = async () => {
   console.log("==========");
   logCurrentTime();
   console.log("A");
   const {  logout } = useAuth();
-  const AUTH_TOKEN_EXPIRATION_MINUTES = 14;
+
   const REFRESH_TOKEN_EXPIRATION_DAYS = 7;
   const { authToken, refreshToken, authTokenTimestamp, refreshTokenTimestamp } = await getStoredTokens();
 
@@ -193,8 +108,17 @@ export const checkTokensAndActUponIt = async () => {
 
 
 export const getAccessToken = async () => {
-  const { authToken } = await getStoredTokens();
-  return authToken;
+  const { authToken, authTokenTimestamp } = await getStoredTokens();
+
+  const authTokenGeneratedTime = new Date(authTokenTimestamp);
+  const authTokenAge = getMinutesSince(authTokenGeneratedTime); // in minutes
+
+  if (authTokenAge < AUTH_TOKEN_EXPIRATION_MINUTES) {
+    console.log("oh yeah!");
+    return authToken;
+  }else{
+    return -1;
+  }
 };
 
 export default useAuth;
