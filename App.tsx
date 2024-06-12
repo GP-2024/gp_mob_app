@@ -196,6 +196,28 @@ export default function App() {
                                                 }
                                             />
                                         </TouchableOpacity>
+                                        {/* <TouchableOpacity
+                                            onPress={() =>
+                                                props.navigation.navigate("Identification Results")
+                                            }
+                                        >
+                                            <MaterialIcons
+                                                name="search"
+                                                size={30}
+                                                color={defaultStyles.colors.primary}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                props.navigation.navigate("Plant Profile")
+                                            }
+                                        >
+                                            <MaterialIcons
+                                                name="search"
+                                                size={30}
+                                                color={defaultStyles.colors.primary}
+                                            />
+                                        </TouchableOpacity> */}
                                     </>
                                 ) : (
                                     <>
@@ -229,28 +251,6 @@ export default function App() {
                                                 }
                                             />
                                         </TouchableOpacity>
-                                        {/* <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate("Identification Results")
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="search"
-                                                size={25}
-                                                color={defaultStyles.colors.primary}
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate("Plant Profile")
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="search"
-                                                size={25}
-                                                color={defaultStyles.colors.primary}
-                                            />
-                                        </TouchableOpacity> */}
                                     </>
                                 )}
                             </View>
