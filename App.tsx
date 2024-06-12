@@ -13,6 +13,8 @@ import ScanningScreen from "./Screens/ScanningScreen";
 import MyPlants from "./Screens/MyPlantsScreen";
 import SearchScreen from "./Screens/SearchScreen";
 import BlogsScreen from "./Screens/BlogsScreen";
+import PlantProfileScreen from "./Screens/PlantProfileScreen";
+import IdentificationResultsScreen from "./Screens/IdentificationResultsScreen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -227,6 +229,28 @@ export default function App() {
                                                 }
                                             />
                                         </TouchableOpacity>
+                                        {/* <TouchableOpacity
+                                            onPress={() =>
+                                                props.navigation.navigate("Identification Results")
+                                            }
+                                        >
+                                            <MaterialIcons
+                                                name="search"
+                                                size={25}
+                                                color={defaultStyles.colors.primary}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                props.navigation.navigate("Plant Profile")
+                                            }
+                                        >
+                                            <MaterialIcons
+                                                name="search"
+                                                size={25}
+                                                color={defaultStyles.colors.primary}
+                                            />
+                                        </TouchableOpacity> */}
                                     </>
                                 )}
                             </View>
@@ -254,6 +278,15 @@ export default function App() {
                                     name="Search"
                                     component={SearchScreen}
                                 />
+                                <Tab.Screen
+                                    name="Identification Results"
+                                    component={IdentificationResultsScreen}
+                                />
+                                <Tab.Screen
+                                    name="Plant Profile"
+                                    component={PlantProfileScreen}
+                                />
+
                             </>
                         ) : (
                             <>
