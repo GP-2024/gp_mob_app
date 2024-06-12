@@ -114,7 +114,7 @@
 //         flexDirection: "row",
 //         alignItems: "stretch",
 //         paddingHorizontal: 18,
-//         paddingVertical: 19,
+//         paddingTop: 19,
 
 //         // borderWidth: 1,
 //         // borderColor: 'black',
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "stretch",
         paddingHorizontal: 18,
-        paddingVertical: 19,
+        paddingTop: 19,
 
         margin: 3,
     },
