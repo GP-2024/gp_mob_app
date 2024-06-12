@@ -376,7 +376,7 @@ const MyPlants = ({ navigation }) => {
                 data={myPlants}
                 renderItem={gridRenderItem}
                 keyExtractor={(item) => item.id}
-                numColumns={2}
+                // numColumns={2}
             />
         </SafeAreaView>
     );
