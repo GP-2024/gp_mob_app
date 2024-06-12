@@ -317,6 +317,25 @@ function getDescription(item) {
     return description.trim(); // Remove trailing whitespace
 }
 
+function getDescriptionDict(item) {
+    item = item.Plant;
+    const scientificName =
+        item.scientific_name.length > 0 ? item.scientific_name[0] : "N/A";
+    const description = {
+        "Scientific Name": scientificName
+    };
+
+    if (item.family !== null) {
+        description["Family"] = item.family;
+    }
+
+    if (item.type !== null) {
+        description["Type"] = item.type;
+    }
+
+    return description;
+}
+
 const gridRenderItem = ({ item }) => (
     <ItemCard
         itemName={item.Plant.common_name}
@@ -325,7 +344,7 @@ const gridRenderItem = ({ item }) => (
                 ? item.Plant.default_image.small_url
                 : "https://i.postimg.cc/P58dnS0W/default-Plant-Image.jpg"
         }
-        itemDescription={getDescription(item)}
+        itemDescriptionDict={getDescriptionDict(item)}
     />
 );
 

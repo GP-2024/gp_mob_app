@@ -1,24 +1,32 @@
 import { View, Image, Dimensions, Text, StyleSheet } from "react-native";
 import React from "react";
 import defaultStyles from "../config/styles";
+import ShortDescriptionViewer from "./ShortDescriptionViewer"
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 const widthFactor = 0.9;
 const heightFactor = 0.4;
 
-const ItemCard = ({ itemImageUrl, itemName, itemDescription }) => {
+const ItemCard = ({ itemImageUrl, itemName, itemDescriptionDict }) => {
     return (
-        <View style={styles.card}>
-            <Image
-                style={styles.cardImageStyle}
-                source={{
-                    uri: itemImageUrl,
-                }}
-            />
-            <View style={styles.cardContent}>
-                <Text style={styles.h5}>{itemName}</Text>
-                <Text style={styles.p}>{itemDescription}</Text>
+
+        <View style={{
+            alignItems: "center",
+            justifyContent: 'center',
+        }}>
+
+            <View style={styles.card}>
+                <Image
+                    style={styles.cardImageStyle}
+                    source={{
+                        uri: itemImageUrl,
+                    }}
+                />
+                <View style={styles.cardContent}>
+                    <Text style={styles.h5}>{itemName}</Text>
+                    <ShortDescriptionViewer characteristics={itemDescriptionDict}></ShortDescriptionViewer>
+                </View>
             </View>
         </View>
     );
@@ -26,10 +34,12 @@ const ItemCard = ({ itemImageUrl, itemName, itemDescription }) => {
 
 const styles = StyleSheet.create({
     card: {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
         borderRadius: 15,
         width: screenWidth * widthFactor,
-        height: screenHeight * heightFactor,
-        backgroundColor: defaultStyles.colors.primaryBackground,
+        
+        backgroundColor: 'pink',
         marginBottom: 20,
         overflow: "hidden",
         shadowColor: defaultStyles.colors.black,
@@ -43,20 +53,23 @@ const styles = StyleSheet.create({
     },
     cardImageStyle: {
         width: "100%",
-        height: "60%",
+        // height: "60%",
+        height: screenHeight * heightFactor*0.6,
     },
     cardContent: {
         padding: 16,
+        paddingVertical: 10,
         backgroundColor: defaultStyles.colors.white,
         borderBottomLeftRadius: 15,
         borderBottomRightRadius: 15,
         alignItems: "flex-start",
+        
     },
     h5: {
         fontSize: 18,
         fontWeight: "bold",
         color: defaultStyles.colors.primary,
-        marginBottom: 8,
+        marginBottom: 1,
         textTransform: "capitalize",
     },
     p: {
