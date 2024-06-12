@@ -55,6 +55,7 @@ export default function App() {
 
     const MINUTE_MS = 30000;
 
+    
     console.log("logged?:", isLoggedIn);
     useEffect(() => {
         const interval = setInterval(() => {
@@ -77,9 +78,7 @@ export default function App() {
         checkAccessToken();
       }, []);
 
-    // console.log("******");
 
-    // isLoggedIn = true;
     return (
         <ToastProvider>
             <appContext.Provider

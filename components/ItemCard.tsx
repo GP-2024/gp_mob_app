@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         width: screenWidth * widthFactor,
         
-        backgroundColor: 'pink',
+        // backgroundColor: 'pink',
         marginBottom: 20,
         overflow: "hidden",
         shadowColor: defaultStyles.colors.black,
