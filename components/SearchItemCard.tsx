@@ -87,48 +87,53 @@ const SearchItemCard = ({
     };
 
     return (
-        <View style={styles.card}>
-            <Image
-                style={styles.cardImageStyle}
-                source={{ uri: itemImageUrl }}
-            />
-            <View style={styles.cardContent}>
-                <View style={styles.cardContentContainer}>
-                    <Text style={styles.h6}>{itemName}</Text>
-                    <Text style={styles.p}>{itemDescription}</Text>
-                </View>
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        console.log(
-                            "Item:",
-                            itemID,
-                            "is asked to be added to my plant collection..."
-                        );
-                        addPlantToUserCollection(itemID);
-                    }}
-                    onPressIn={handlePressIn}
-                    onPressOut={handlePressOut}
-                >
-                    <Animated.View
-                        style={[
-                            styles.iconButton,
-                            {
-                                backgroundColor: defaultStyles.colors.primary,
-                                transform: [{ scale: scaleValue }],
-                            },
-                        ]}
+        <View style={{
+            alignItems: "center",
+            justifyContent: 'center',
+        }}>
+            <View style={styles.card}>
+                <Image
+                    style={styles.cardImageStyle}
+                    source={{ uri: itemImageUrl }}
+                />
+                <View style={styles.cardContent}>
+                    <View style={styles.cardContentContainer}>
+                        <Text style={styles.h6}>{itemName}</Text>
+                        <Text style={styles.p}>{itemDescription}</Text>
+                    </View>
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            console.log(
+                                "Item:",
+                                itemID,
+                                "is asked to be added to my plant collection..."
+                            );
+                            addPlantToUserCollection(itemID);
+                        }}
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
                     >
-                        {!added ? (
-                            <FontAwesome5 name="plus" size={20} color="white" />
-                        ) : (
-                            <FontAwesome5
-                                name="check"
-                                size={20}
-                                color="white"
-                            />
-                        )}
-                    </Animated.View>
-                </TouchableWithoutFeedback>
+                        <Animated.View
+                            style={[
+                                styles.iconButton,
+                                {
+                                    backgroundColor: defaultStyles.colors.primary,
+                                    transform: [{ scale: scaleValue }],
+                                },
+                            ]}
+                        >
+                            {!added ? (
+                                <FontAwesome5 name="plus" size={20} color="white" />
+                            ) : (
+                                <FontAwesome5
+                                    name="check"
+                                    size={20}
+                                    color="white"
+                                />
+                            )}
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                </View>
             </View>
         </View>
     );
@@ -138,9 +143,11 @@ const styles = StyleSheet.create({
     card: {
         flexDirection: "row",
         borderRadius: 15,
-        width: screenWidth * widthFactor,
-        height: screenHeight * heightFactor,
+        // width: screenWidth * widthFactor,
+        minHeight: screenHeight * heightFactor,
         alignItems: "center",
+        justifyContent: 'center',
+
         backgroundColor: "#f9f9f9",
         marginBottom: 15,
         overflow: "hidden",
