@@ -322,7 +322,7 @@ const gridRenderItem = ({ item }) => (
         itemName={item.Plant.common_name}
         itemImageUrl={
             item.Plant.default_image
-                ? item.Plant.default_image.original_url
+                ? item.Plant.default_image.small_url
                 : "https://i.postimg.cc/P58dnS0W/default-Plant-Image.jpg"
         }
         itemDescription={getDescription(item)}
