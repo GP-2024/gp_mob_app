@@ -42,6 +42,27 @@ const screenHeight = Dimensions.get("window").height;
 const widthFactor = 0.88;
 const heightFactor = 0.09;
 
+function DictionarySmallSummaryForDebugging(dictionary) {
+    console.log("===DEBUGGING DICTIONARY===");
+    if (dictionary === null) {
+      console.log("The dictionary is null.");
+      return;
+    }
+  
+    const keys = Object.keys(dictionary);
+    const keyCount = keys.length;
+  
+    if (keyCount === 0) {
+      console.log("The dictionary is empty.");
+    } else if (keyCount <= 3) {
+      console.log("The dictionary has the following keys:", keys.join(", "));
+    } else {
+      const firstThreeKeys = keys.slice(0, 3);
+      console.log(`The dictionary has the following keys: ${firstThreeKeys.join(", ")} and ${keyCount - 3} remaining keys.`);
+    }
+    console.log("==========================");
+  }
+
 var blogs1 = [
     {
         id: "bff11d30-a7e7-49ab-bd38-3bbc921c3836",
@@ -168,7 +189,7 @@ const getAllBlogPosts = async (page) => {
             },
         });
         console.log("blogs fetched!");
-        console.log(response.data);
+        DictionarySmallSummaryForDebugging(response.data);
         return response.data.posts;
     } catch (error) {
         console.error("Error fetching blog posts:", error);

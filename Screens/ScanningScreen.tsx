@@ -12,17 +12,10 @@ import TomatoDiagnosisResultsScreen from './TomatoDiagnosisResultsScreen';
 // const screenWidth = Dimensions.get("window").width;
 // const screenHeight = Dimensions.get("window").height;
 
-type classType = "Early Blight" | "Late Blight" | "Healthy" | "Loading";
-
-const defaultClassType: classType = "Loading";
-
 const ScanningScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [diagnosedImageURI, setDiagnosedImageURI] = useState("");
-    const [diagnosisResult, setDiagnosisResult] = useState({
-        class: defaultClassType,
-        confidence: 0.9,
-    });
+    const [diagnosisResult, setDiagnosisResult] = useState();
     const [loading, setLoading] = useState(false);
     const [potatoMode, setPotatoMode] = useState(false); // if true, user is diagnosing potato, if false, it is tomato
     const [cropAskerVisible, setCropAskerVisible] = useState(false);
@@ -60,7 +53,7 @@ const ScanningScreen = () => {
 
                 timer = setTimeout(() => {
                     cancelTokenSource.cancel("Request timed out");
-                }, 10000);
+                }, 100000); // 1 hundred seconds
 
                 // Convert image to JPEG if necessary
                 const imageUri = result.assets[0].uri;
@@ -76,14 +69,15 @@ const ScanningScreen = () => {
                     type: imageType,
                 });
 
+                let requestURL = 'https://final-detect-1.onrender.com/predict/' + crop;
                 // Send the image to the endpoint
-                const response = await axios.post('https://final-detect-1.onrender.com/predict/' + crop, formData, {
+                const response = await axios.post(requestURL, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                     cancelToken: cancelTokenSource.token
                 });
-
+                console.log(requestURL);
                 if (response.status === 200) {
                     console.log('Request successful', response.data);
                     setDiagnosedImageURI(imageUri);

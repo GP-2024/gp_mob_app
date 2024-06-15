@@ -10,7 +10,9 @@ import CollapsibleContent from '../components/CollapsibleContent';
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-
+function makeLowerCase(str) {
+    return str.toLowerCase();
+}
 
 interface TomatoDiagnosisResultsScreenProps {
     DiagnosedImage?: string;
@@ -25,8 +27,7 @@ interface TomatoDiagnosisResultsScreenProps {
         'target-spot' |
         'yellow-leaf-curl-virus' |
         'mosaic-virus' |
-        'healthy' |
-        'Loading';
+        'healthy' 
         confidence: number;
     };
     modalSetter?: React.Dispatch<React.SetStateAction<boolean>>
@@ -34,13 +35,12 @@ interface TomatoDiagnosisResultsScreenProps {
 
 const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> = ({
     DiagnosedImage = "https://i.postimg.cc/DZTtX4MN/Diagnosed-Leaf-Default-Image.png",
-    diagnosisResults = {
-        class: 'Loading',
-        confidence: 0.96,
-    },
+    diagnosisResults,
     modalSetter
 
 }) => {
+    diagnosisResults.class=makeLowerCase(diagnosisResults.class);
+    
     const closeModal = () => {
         modalSetter(false);
     };

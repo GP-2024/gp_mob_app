@@ -19,7 +19,7 @@ function makeLowerCase(str) {
 interface PotatoDiagnosisResultsScreenProps {
     DiagnosedImage?: string;
     diagnosisResults?: {
-        class: 'potato___early_blight' | 'potato___late_blight' | 'potato___healthy' | 'Loading';
+        class: 'potato___early_blight' | 'potato___late_blight' | 'potato___healthy';
         confidence: number;
     };
     modalSetter?: React.Dispatch<React.SetStateAction<boolean>>
@@ -27,13 +27,12 @@ interface PotatoDiagnosisResultsScreenProps {
 
 const PotatoDiagnosisResultsScreen: React.FC<PotatoDiagnosisResultsScreenProps> = ({
     DiagnosedImage = "https://i.postimg.cc/DZTtX4MN/Diagnosed-Leaf-Default-Image.png",
-    diagnosisResults = {
-        class: 'Loading',
-        confidence: 0.96,
-    },
+    diagnosisResults,
     modalSetter
 
 }) => {
+    diagnosisResults.class=makeLowerCase(diagnosisResults.class);
+    console.log(diagnosisResults.class);
     const closeModal = () => {
         modalSetter(false);
     };
