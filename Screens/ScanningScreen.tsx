@@ -52,7 +52,7 @@ const ScanningScreen = () => {
                 let cancelTokenSource = axios.CancelToken.source();
 
                 timer = setTimeout(() => {
-                    cancelTokenSource.cancel("Request timed out");
+                    cancelTokenSource.cancel("Request took too long time!");
                 }, 100000); // 1 hundred seconds
 
                 // Convert image to JPEG if necessary
@@ -105,7 +105,7 @@ const ScanningScreen = () => {
                 clearTimeout(timer);
                 setLoading(false);
                 setModalVisible(false);
-                Alert.alert("", "Diagnosis failed, request timed out.");
+                Alert.alert("", "Diagnosis failed, request took too long time!.");
 
             } else {
                 clearTimeout(timer);
