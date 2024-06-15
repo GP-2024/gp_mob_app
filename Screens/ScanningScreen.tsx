@@ -122,7 +122,7 @@ const ScanningScreen = () => {
         } finally {
             clearTimeout(timer);
             setLoading(false);
-            setModalVisible(true);
+            // setModalVisible(false);
         }
     };
 

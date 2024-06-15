@@ -5,27 +5,21 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 
 import CollapsibleContent from '../components/CollapsibleContent';
 
-let class_labels = [
-    'Tomato_Bacterial_spot',
-    'Tomato_Early_blight',
-    'Tomato_Late_blight',
-    'Tomato_Leaf_Mold',
-    'Tomato_Septoria_leaf_spot',
-    'Tomato_Spider_mites_Two_spotted_spider_mite',
-    'TomatoTarget_Spot',
-    'TomatoTomato_YellowLeafCurl_Virus',
-    'Mosaic-virus',
-    'Tomato_healthy'];
+// Potato___healthy
+// Potato___Early_blight
+// Potato___Late_blight
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-
+function makeLowerCase(str) {
+    return str.toLowerCase();
+}
 
 interface PotatoDiagnosisResultsScreenProps {
     DiagnosedImage?: string;
     diagnosisResults?: {
-        class: 'Potato___Early_blight' | 'Potato___Late_blight' | 'Potato__Healthy' | 'Loading';
+        class: 'potato___early_blight' | 'potato___late_blight' | 'potato___healthy' | 'Loading';
         confidence: number;
     };
     modalSetter?: React.Dispatch<React.SetStateAction<boolean>>
@@ -55,33 +49,33 @@ const PotatoDiagnosisResultsScreen: React.FC<PotatoDiagnosisResultsScreenProps> 
     const confidenceText = confidenceLevels[confidenceIndex];
 
     const classDescriptions: { [key: string]: string } = {
-        "Potato___Late_blight": "Late blight is a serious plant disease caused by the pathogen Phytophthora infestans. It primarily affects potatoes and tomatoes, causing significant crop damage. The disease thrives in cool, moist conditions, leading to rapid plant decay and yield loss.",
-        "Potato___Early_blight": "Early blight is a fungal disease affecting plants, particularly tomatoes and potatoes, caused by Alternaria species. It results in dark, concentric spots on leaves, stems, and fruit, leading to leaf drop and reduced yield.",
-        "Potato__Healthy": "A healthy plant leaf is vibrant in color, typically green, free from spots or discoloration, firm, and exhibits no signs of wilting, pests, or disease.",
+        "potato___late_blight": "Late blight is a serious plant disease caused by the pathogen Phytophthora infestans. It primarily affects potatoes and tomatoes, causing significant crop damage. The disease thrives in cool, moist conditions, leading to rapid plant decay and yield loss.",
+        "potato___early_blight": "Early blight is a fungal disease affecting plants, particularly tomatoes and potatoes, caused by Alternaria species. It results in dark, concentric spots on leaves, stems, and fruit, leading to leaf drop and reduced yield.",
+        "potato___healthy": "A healthy plant leaf is vibrant in color, typically green, free from spots or discoloration, firm, and exhibits no signs of wilting, pests, or disease.",
     };
 
     const Title: { [key: string]: string } = {
-        "Potato___Late_blight": "Late Blight",
-        "Potato___Early_blight": "Early Blight",
-        "Potato__Healthy": "Healthy",
+        "potato___late_blight": "Late Blight",
+        "potato___early_blight": "Early Blight",
+        "potato___healthy": "Healthy",
     };
 
     const recommendations: { [key: string]: string } = {
-        "Potato___Late_blight": "Your plant has Late Blight. Remove and destroy affected areas immediately. Apply a suitable fungicide and avoid overhead watering. Consider isolating the plant to prevent infection of others.",
-        "Potato___Early_blight": "Your plant shows signs of Early Blight. Prune affected leaves, apply a fungicide, and improve air circulation to prevent further spread. Monitor closely for any changes.",
-        "Potato__Healthy": "Your plant is healthy! Keep up the good work. Continue regular watering, ensure proper sunlight, and monitor for any signs of stress to maintain its health.",
+        "potato___late_blight": "Your plant has Late Blight. Remove and destroy affected areas immediately. Apply a suitable fungicide and avoid overhead watering. Consider isolating the plant to prevent infection of others.",
+        "potato___early_blight": "Your plant shows signs of Early Blight. Prune affected leaves, apply a fungicide, and improve air circulation to prevent further spread. Monitor closely for any changes.",
+        "potato___healthy": "Your plant is healthy! Keep up the good work. Continue regular watering, ensure proper sunlight, and monitor for any signs of stress to maintain its health.",
     };
 
     const facts: { [key: string]: string } = {
-        "Potato___Late_blight": "Did you know that Late Blight was responsible for the Irish Potato Famine in the 1840s? Caused by the pathogen Phytophthora infestans, it spreads rapidly in wet, cool conditions.",
-        "Potato___Early_blight": "Did you know that Early Blight is caused by the fungus Alternaria solani? It thrives in warm, humid conditions and primarily affects older leaves, leading to dark spots and yellowing.",
-        "Potato__Healthy": "Did you know that healthy plants can improve air quality by absorbing pollutants? They also release oxygen, making your environment fresher and healthier.",
+        "potato___late_blight": "Did you know that Late Blight was responsible for the Irish Potato Famine in the 1840s? Caused by the pathogen Phytophthora infestans, it spreads rapidly in wet, cool conditions.",
+        "potato___early_blight": "Did you know that Early Blight is caused by the fungus Alternaria solani? It thrives in warm, humid conditions and primarily affects older leaves, leading to dark spots and yellowing.",
+        "potato___healthy": "Did you know that healthy plants can improve air quality by absorbing pollutants? They also release oxygen, making your environment fresher and healthier.",
     };
 
     const leafColor = {
-        "Potato__Healthy": "green",
-        "Potato___Early_blight": "#FFA500",
-        "Potato___Late_blight": "#8B4513",
+        "potato___healthy": "green",
+        "potato___early_blight": "#FFA500",
+        "potato___late_blight": "#8B4513",
     };
 
     return (
@@ -93,7 +87,7 @@ const PotatoDiagnosisResultsScreen: React.FC<PotatoDiagnosisResultsScreenProps> 
             </Text>
             <View style={styles.classContainer}>
                 <FontAwesome name="leaf" size={24} color={leafColor[diagnosisResults.class]} />
-                <Text style={[styles.classText, diagnosisResults.class === 'Potato__Healthy' && styles.healthyText]}>
+                <Text style={[styles.classText, diagnosisResults.class === 'potato___healthy' && styles.healthyText]}>
                     {Title[diagnosisResults.class]}
                 </Text>
             </View>

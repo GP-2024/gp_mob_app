@@ -5,17 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 
 import CollapsibleContent from '../components/CollapsibleContent';
 
-let tomato_class_labels = [
-    'Tomato_Bacterial_spot',
-    'Early-blight',
-    'Tomato_Late_blight',
-    'Tomato_Leaf_Mold',
-    'Tomato_Septoria_leaf_spot',
-    'Tomato_Spider_mites_Two_spotted_spider_mite',
-    'TomatoTarget_Spot',
-    'TomatoTomato_YellowLeafCurl_Virus',
-    'Mosaic-virus',
-    'Tomato_healthy'];
+
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -26,16 +16,16 @@ interface TomatoDiagnosisResultsScreenProps {
     DiagnosedImage?: string;
     diagnosisResults?: {
         class:
-        'Tomato_Bacterial_spot' |
-        'Early-blight' |
-        'Tomato_Late_blight' |
-        'Tomato_Leaf_Mold' |
-        'Tomato_Septoria_leaf_spot' |
-        'Tomato_Spider_mites_Two_spotted_spider_mite' |
-        'TomatoTarget_Spot' |
-        'TomatoTomato_YellowLeafCurl_Virus' |
-        'Mosaic-virus' |
-        'Tomato_healthy' |
+        'bacterial-spot' |
+        'early-blight' |
+        'late-blight' |
+        'leaf-mold' |
+        'septoria-leaf-spot' |
+        'spider-mites' |
+        'target-spot' |
+        'yellow-leaf-curl-virus' |
+        'mosaic-virus' |
+        'healthy' |
         'Loading';
         confidence: number;
     };
@@ -66,68 +56,68 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
     const confidenceText = confidenceLevels[confidenceIndex];
 
     const classDescriptions: { [key: string]: string } = {
-        "Tomato_Bacterial_spot": "Bacterial spot is a bacterial disease caused by Xanthomonas species. It affects tomato plants, resulting in small, water-soaked spots on leaves, fruit, and stems, which can lead to defoliation and reduced yield.",
-        "Early-blight": "Early blight is a fungal disease affecting tomato plants, caused by Alternaria species. It results in dark, concentric spots on leaves, stems, and fruit, leading to leaf drop and reduced yield.",
-        "Tomato_Late_blight": "Late blight is a serious plant disease caused by the pathogen Phytophthora infestans. It primarily affects tomatoes and potatoes, causing significant crop damage. The disease thrives in cool, moist conditions, leading to rapid plant decay and yield loss.",
-        "Tomato_Leaf_Mold": "Leaf mold is a fungal disease caused by Passalora fulva. It affects tomato plants, resulting in yellow spots on the upper leaf surface and a velvety, olive-green mold on the underside, which can cause significant leaf loss.",
-        "Tomato_Septoria_leaf_spot": "Septoria leaf spot is a fungal disease caused by Septoria lycopersici. It primarily affects tomato plants, leading to small, circular spots with dark borders and grey centers on leaves, causing premature defoliation.",
-        "Tomato_Spider_mites_Two_spotted_spider_mite": "Spider mites are tiny arachnids that feed on tomato plant sap, causing stippling, yellowing, and webbing on leaves. Heavy infestations can lead to significant plant stress and reduced yields.",
-        "TomatoTarget_Spot": "Target spot is a fungal disease caused by Corynespora cassiicola. It affects tomato plants, leading to dark, concentric spots on leaves, stems, and fruit, which can cause defoliation and fruit rot.",
-        "TomatoTomato_YellowLeafCurl_Virus": "Tomato yellow leaf curl virus (TYLCV) is a viral disease transmitted by whiteflies. It causes yellowing and curling of leaves, stunted growth, and reduced fruit production in tomato plants.",
-        "Mosaic-virus": "Tomato mosaic virus (ToMV) is a viral disease that causes mottling, mosaic patterns, and distortion of leaves. Infected tomato plants exhibit reduced vigor and fruit quality.",
-        "Tomato_healthy": "A healthy tomato plant leaf is vibrant in color, typically green, free from spots or discoloration, firm, and exhibits no signs of wilting, pests, or disease.",
+        "bacterial-spot": "Bacterial spot is a bacterial disease caused by Xanthomonas species. It affects tomato plants, resulting in small, water-soaked spots on leaves, fruit, and stems, which can lead to defoliation and reduced yield.",
+        "early-blight": "Early blight is a fungal disease affecting tomato plants, caused by Alternaria species. It results in dark, concentric spots on leaves, stems, and fruit, leading to leaf drop and reduced yield.",
+        "late-blight": "Late blight is a serious plant disease caused by the pathogen Phytophthora infestans. It primarily affects tomatoes and potatoes, causing significant crop damage. The disease thrives in cool, moist conditions, leading to rapid plant decay and yield loss.",
+        "leaf-mold": "Leaf mold is a fungal disease caused by Passalora fulva. It affects tomato plants, resulting in yellow spots on the upper leaf surface and a velvety, olive-green mold on the underside, which can cause significant leaf loss.",
+        "septoria-leaf-spot": "Septoria leaf spot is a fungal disease caused by Septoria lycopersici. It primarily affects tomato plants, leading to small, circular spots with dark borders and grey centers on leaves, causing premature defoliation.",
+        "spider-mites": "Spider mites are tiny arachnids that feed on tomato plant sap, causing stippling, yellowing, and webbing on leaves. Heavy infestations can lead to significant plant stress and reduced yields.",
+        "target-spot": "Target spot is a fungal disease caused by Corynespora cassiicola. It affects tomato plants, leading to dark, concentric spots on leaves, stems, and fruit, which can cause defoliation and fruit rot.",
+        "yellow-leaf-curl-virus": "Tomato yellow leaf curl virus (TYLCV) is a viral disease transmitted by whiteflies. It causes yellowing and curling of leaves, stunted growth, and reduced fruit production in tomato plants.",
+        "mosaic-virus": "Tomato mosaic virus (ToMV) is a viral disease that causes mottling, mosaic patterns, and distortion of leaves. Infected tomato plants exhibit reduced vigor and fruit quality.",
+        "healthy": "A healthy tomato plant leaf is vibrant in color, typically green, free from spots or discoloration, firm, and exhibits no signs of wilting, pests, or disease.",
     };
 
     const Title: { [key: string]: string } = {
-        "Tomato_Bacterial_spot": "Bacterial Spot",
-        "Early-blight": "Early Blight",
-        "Tomato_Late_blight": "Late Blight",
-        "Tomato_Leaf_Mold": "Leaf Mold",
-        "Tomato_Septoria_leaf_spot": "Septoria Leaf Spot",
-        "Tomato_Spider_mites_Two_spotted_spider_mite": "Spider Mites",
-        "TomatoTarget_Spot": "Target Spot",
-        "TomatoTomato_YellowLeafCurl_Virus": "Yellow Leaf Curl Virus",
-        "Mosaic-virus": "Mosaic Virus",
-        "Tomato_healthy": "Healthy",
+        "bacterial-spot": "Bacterial Spot",
+        "early-blight": "Early Blight",
+        "late-blight": "Late Blight",
+        "leaf-mold": "Leaf Mold",
+        "septoria-leaf-spot": "Septoria Leaf Spot",
+        "spider-mites": "Spider Mites",
+        "target-spot": "Target Spot",
+        "yellow-leaf-curl-virus": "Yellow Leaf Curl Virus",
+        "mosaic-virus": "Mosaic Virus",
+        "healthy": "Healthy",
     };
 
     const recommendations: { [key: string]: string } = {
-        "Tomato_Bacterial_spot": "Your plant has Bacterial Spot. Remove and destroy affected areas. Avoid overhead watering and ensure proper spacing for air circulation. Consider using copper-based bactericides.",
-        "Early-blight": "Your plant shows signs of Early Blight. Prune affected leaves, apply a fungicide, and improve air circulation to prevent further spread. Monitor closely for any changes.",
-        "Tomato_Late_blight": "Your plant has Late Blight. Remove and destroy affected areas immediately. Apply a suitable fungicide and avoid overhead watering. Consider isolating the plant to prevent infection of others.",
-        "Tomato_Leaf_Mold": "Your plant has Leaf Mold. Remove and destroy affected leaves. Ensure proper ventilation and reduce humidity. Apply a fungicide if necessary.",
-        "Tomato_Septoria_leaf_spot": "Your plant has Septoria Leaf Spot. Remove affected leaves and improve air circulation. Apply a fungicide and avoid overhead watering.",
-        "Tomato_Spider_mites_Two_spotted_spider_mite": "Your plant has Spider Mites. Increase humidity around the plant and wash off mites with water. Consider using insecticidal soap or miticides.",
-        "TomatoTarget_Spot": "Your plant shows signs of Target Spot. Remove and destroy affected leaves. Apply a fungicide and ensure proper spacing and air circulation.",
-        "TomatoTomato_YellowLeafCurl_Virus": "Your plant has Yellow Leaf Curl Virus. Remove infected plants to prevent spread. Control whiteflies and consider using resistant varieties.",
-        "Mosaic-virus": "Your plant has Tomato Mosaic Virus. Remove infected plants and sanitize tools and hands after handling. Control aphids and other pests that may spread the virus.",
-        "Tomato_healthy": "Your plant is healthy! Keep up the good work. Continue regular watering, ensure proper sunlight, and monitor for any signs of stress to maintain its health.",
+        "bacterial-spot": "Your plant has Bacterial Spot. Remove and destroy affected areas. Avoid overhead watering and ensure proper spacing for air circulation. Consider using copper-based bactericides.",
+        "early-blight": "Your plant shows signs of Early Blight. Prune affected leaves, apply a fungicide, and improve air circulation to prevent further spread. Monitor closely for any changes.",
+        "late-blight": "Your plant has Late Blight. Remove and destroy affected areas immediately. Apply a suitable fungicide and avoid overhead watering. Consider isolating the plant to prevent infection of others.",
+        "leaf-mold": "Your plant has Leaf Mold. Remove and destroy affected leaves. Ensure proper ventilation and reduce humidity. Apply a fungicide if necessary.",
+        "septoria-leaf-spot": "Your plant has Septoria Leaf Spot. Remove affected leaves and improve air circulation. Apply a fungicide and avoid overhead watering.",
+        "spider-mites": "Your plant has Spider Mites. Increase humidity around the plant and wash off mites with water. Consider using insecticidal soap or miticides.",
+        "target-spot": "Your plant shows signs of Target Spot. Remove and destroy affected leaves. Apply a fungicide and ensure proper spacing and air circulation.",
+        "yellow-leaf-curl-virus": "Your plant has Yellow Leaf Curl Virus. Remove infected plants to prevent spread. Control whiteflies and consider using resistant varieties.",
+        "mosaic-virus": "Your plant has Tomato Mosaic Virus. Remove infected plants and sanitize tools and hands after handling. Control aphids and other pests that may spread the virus.",
+        "healthy": "Your plant is healthy! Keep up the good work. Continue regular watering, ensure proper sunlight, and monitor for any signs of stress to maintain its health.",
     };
 
     const facts: { [key: string]: string } = {
-        "Tomato_Bacterial_spot": "Did you know that Bacterial Spot is caused by Xanthomonas species and can survive in seeds and plant debris? It spreads rapidly in warm, wet conditions.",
-        "Early-blight": "Did you know that Early Blight is caused by the fungus Alternaria solani? It thrives in warm, humid conditions and primarily affects older leaves, leading to dark spots and yellowing.",
-        "Tomato_Late_blight": "Did you know that Late Blight was responsible for the Irish Potato Famine in the 1840s? Caused by the pathogen Phytophthora infestans, it spreads rapidly in wet, cool conditions.",
-        "Tomato_Leaf_Mold": "Did you know that Leaf Mold is caused by the fungus Passalora fulva? It spreads in humid conditions and can significantly affect yield if not controlled.",
-        "Tomato_Septoria_leaf_spot": "Did you know that Septoria Leaf Spot is caused by the fungus Septoria lycopersici? It spreads in wet conditions and can cause significant defoliation.",
-        "Tomato_Spider_mites_Two_spotted_spider_mite": "Did you know that Spider Mites are tiny arachnids that can reproduce rapidly under hot, dry conditions? They can cause extensive damage to plants if not controlled.",
-        "TomatoTarget_Spot": "Did you know that Target Spot is caused by the fungus Corynespora cassiicola? It can affect a wide range of plants, causing dark, target-like spots on leaves and fruit.",
-        "TomatoTomato_YellowLeafCurl_Virus": "Did you know that Tomato Yellow Leaf Curl Virus is transmitted by whiteflies and can cause significant yield loss in tomato plants? It is a major concern in many tomato-growing regions.",
-        "Mosaic-virus": "Did you know that Tomato Mosaic Virus can survive in soil and plant debris for long periods? It can spread through contaminated tools and hands, as well as by pests like aphids.",
-        "Tomato_healthy": "Did you know that healthy plants can improve air quality by absorbing pollutants? They also release oxygen, making your environment fresher and healthier.",
+        "bacterial-spot": "Did you know that Bacterial Spot is caused by Xanthomonas species and can survive in seeds and plant debris? It spreads rapidly in warm, wet conditions.",
+        "early-blight": "Did you know that Early Blight is caused by the fungus Alternaria solani? It thrives in warm, humid conditions and primarily affects older leaves, leading to dark spots and yellowing.",
+        "late-blight": "Did you know that Late Blight was responsible for the Irish Potato Famine in the 1840s? Caused by the pathogen Phytophthora infestans, it spreads rapidly in wet, cool conditions.",
+        "leaf-mold": "Did you know that Leaf Mold is caused by the fungus Passalora fulva? It spreads in humid conditions and can significantly affect yield if not controlled.",
+        "septoria-leaf-spot": "Did you know that Septoria Leaf Spot is caused by the fungus Septoria lycopersici? It spreads in wet conditions and can cause significant defoliation.",
+        "spider-mites": "Did you know that Spider Mites are tiny arachnids that can reproduce rapidly under hot, dry conditions? They can cause extensive damage to plants if not controlled.",
+        "target-spot": "Did you know that Target Spot is caused by the fungus Corynespora cassiicola? It can affect a wide range of plants, causing dark, target-like spots on leaves and fruit.",
+        "yellow-leaf-curl-virus": "Did you know that Tomato Yellow Leaf Curl Virus is transmitted by whiteflies and can cause significant yield loss in tomato plants? It is a major concern in many tomato-growing regions.",
+        "mosaic-virus": "Did you know that Tomato Mosaic Virus can survive in soil and plant debris for long periods? It can spread through contaminated tools and hands, as well as by pests like aphids.",
+        "healthy": "Did you know that healthy plants can improve air quality by absorbing pollutants? They also release oxygen, making your environment fresher and healthier.",
     };
 
     const leafColor = {
-        "Tomato_healthy": "green",
-        "Tomato_Bacterial_spot": "#FFD700",
-        "Early-blight": "#FFA500",
-        "Tomato_Late_blight": "#8B4513",
-        "Tomato_Leaf_Mold": "#808080",
-        "Tomato_Septoria_leaf_spot": "#A52A2A",
-        "Tomato_Spider_mites_Two_spotted_spider_mite": "#FF4500",
-        "TomatoTarget_Spot": "#8B0000",
-        "TomatoTomato_YellowLeafCurl_Virus": "#FFFF00",
-        "Mosaic-virus": "#00FF00",
+        "healthy": "green",
+        "bacterial-spot": "#FFD700",
+        "early-blight": "#FFA500",
+        "late-blight": "#8B4513",
+        "leaf-mold": "#808080",
+        "septoria-leaf-spot": "#A52A2A",
+        "spider-mites": "#FF4500",
+        "target-spot": "#8B0000",
+        "yellow-leaf-curl-virus": "#FFFF00",
+        "mosaic-virus": "#00FF00",
     };
 
 
@@ -140,7 +130,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
             </Text>
             <View style={styles.classContainer}>
                 <FontAwesome name="leaf" size={24} color={leafColor[diagnosisResults.class]} />
-                <Text style={[styles.classText, diagnosisResults.class === 'Tomato_healthy' && styles.healthyText]}>
+                <Text style={[styles.classText, diagnosisResults.class === 'healthy' && styles.healthyText]}>
                     {Title[diagnosisResults.class]}
                 </Text>
             </View>
