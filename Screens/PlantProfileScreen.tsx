@@ -11,7 +11,8 @@ import {
   Button,
   Text,
   Pressable,
-  Dimensions
+  Dimensions,
+  Modal
 } from 'react-native';
 const { height, width } = Dimensions.get('window');
 import React, { useState, useEffect, useCallback } from 'react';
@@ -147,11 +148,16 @@ function extractName(plantDict) {
   }
 }
 
+
+
 // Define the PlantProfileScreen component
-const PlantProfileScreen = () => {
-  const plantID = 4;
+const PlantProfileScreen = ({plantID, modalSetter}) => {
   const { login, logout } = useAuth();
   const [plantDetails, setPlantDetails] = useState({});
+
+  const closeModal = () => {
+    modalSetter(false);
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -230,6 +236,10 @@ const PlantProfileScreen = () => {
 
         </View>
       </View>
+      <TouchableOpacity style={styles.floatingButton} 
+      onPress={() => {closeModal()}}>
+        <Icon name="chevron-left" size={20} color="#fff" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -278,7 +288,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: width,
-    height: height * 0.58,
+    height: height * 0.68,
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -345,7 +355,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   upperBlock: {
-    flex: 1.2,
+    flex: 1.05,
     backgroundColor: defaultStyles.colors.primary,
     // borderWidth: 1,
     // borderColor: 'red',
@@ -443,7 +453,24 @@ const styles = StyleSheet.create({
   },
   logoutButtonTextStyle: {
     color: 'white'
-  }
+  },
+  floatingButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    width: 40,
+    height: 40,
+    backgroundColor: 'black',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5, // for shadow on Android
+    shadowColor: '#000', // for shadow on iOS
+    shadowOffset: { width: 0, height: 2 }, // for shadow on iOS
+    shadowOpacity: 0.8, // for shadow on iOS
+    shadowRadius: 2, // for shadow on iOS
+    opacity:0.7,
+  },
 
 });
 

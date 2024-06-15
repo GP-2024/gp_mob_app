@@ -15,6 +15,7 @@ import SearchScreen from "./Screens/SearchScreen";
 import BlogsScreen from "./Screens/BlogsScreen";
 import PlantProfileScreen from "./Screens/PlantProfileScreen";
 import IdentificationResultsScreen from "./Screens/IdentificationResultsScreen";
+import PotatoDiagnosisResultsScreen from "./Screens/PotatoDiagnosisResultsScreen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -37,6 +38,7 @@ function logCurrentTime() {
 
 const Tab = createBottomTabNavigator();
 
+
 export const appContext = createContext({
     isLoggedIn: null,
     setIsLoggedIn: null,
@@ -55,7 +57,7 @@ export default function App() {
 
     const MINUTE_MS = 30000;
 
-    
+
     console.log("logged?:", isLoggedIn);
     useEffect(() => {
         const interval = setInterval(() => {
@@ -67,16 +69,18 @@ export default function App() {
 
     useEffect(() => {
         const checkAccessToken = async () => {
-          const token = await getAccessToken();
-          if (token === -1) {
-            setIsLoggedIn(false);
-          } else {
-            setIsLoggedIn(true);
-          }
+            const token = await getAccessToken();
+            if (token === -1) {
+                setIsLoggedIn(false);
+            } else {
+                setIsLoggedIn(true);
+            }
         };
-    
+
         checkAccessToken();
-      }, []);
+    }, []);
+
+
 
 
     return (
@@ -131,140 +135,135 @@ export default function App() {
                                     marginBottom: 10,
                                 }}
                             >
-                                {isLoggedIn ? (
-                                    <>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "Blogs"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="notes"
-                                                size={30}
-                                                color={
-                                                    defaultStyles.colors.primary
+                                {isLoggedIn ?
+                                    true ?
+                                        (
+
+                                            <>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                        props.navigation.navigate(
+                                                            "Blogs"
+                                                        )
+                                                    }
+                                                >
+                                                    <MaterialIcons
+                                                        name="notes"
+                                                        size={30}
+                                                        color={
+                                                            defaultStyles.colors.primary
+                                                        }
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                        props.navigation.navigate(
+                                                            "Profile"
+                                                        )
+                                                    }
+                                                >
+                                                    <MaterialIcons
+                                                        name="person"
+                                                        size={30}
+                                                        color={
+                                                            defaultStyles.colors.primary
+                                                        }
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                        props.navigation.navigate(
+                                                            "Scan"
+                                                        )
+                                                    }
+                                                >
+                                                    <MaterialIcons
+                                                        name="camera"
+                                                        size={50}
+                                                        color={
+                                                            defaultStyles.colors.primary
+                                                        }
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                        props.navigation.navigate(
+                                                            "My Plants"
+                                                        )
+                                                    }
+                                                >
+                                                    <MaterialIcons
+                                                        name="nature"
+                                                        size={30}
+                                                        color={
+                                                            defaultStyles.colors.primary
+                                                        }
+                                                    />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                        props.navigation.navigate(
+                                                            "Search"
+                                                        )
+                                                    }
+                                                >
+                                                    <MaterialIcons
+                                                        name="search"
+                                                        size={30}
+                                                        color={
+                                                            defaultStyles.colors.primary
+                                                        }
+                                                    />
+                                                </TouchableOpacity>
+                                                {/* <TouchableOpacity
+                                                    onPress={() =>
+                                                        props.navigation.navigate("Diagnosis Results")
+                                                    }
+                                                >
+                                                    <MaterialIcons
+                                                        name="search"
+                                                        size={30}
+                                                        color={defaultStyles.colors.primary}
+                                                    />
+                                                </TouchableOpacity> */}
+                                            </>
+                                        )
+                                        :
+                                        <></>
+                                    : (
+                                        <>
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    props.navigation.navigate(
+                                                        "Login"
+                                                    )
                                                 }
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "Profile"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="person"
-                                                size={30}
-                                                color={
-                                                    defaultStyles.colors.primary
+                                            >
+                                                <MaterialIcons
+                                                    name="arrow-forward"
+                                                    size={30}
+                                                    color={
+                                                        defaultStyles.colors.primary
+                                                    }
+                                                />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    props.navigation.navigate(
+                                                        "Sign Up"
+                                                    )
                                                 }
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "Scan"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="camera"
-                                                size={50}
-                                                color={
-                                                    defaultStyles.colors.primary
-                                                }
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "My Plants"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="nature"
-                                                size={30}
-                                                color={
-                                                    defaultStyles.colors.primary
-                                                }
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "Search"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="search"
-                                                size={30}
-                                                color={
-                                                    defaultStyles.colors.primary
-                                                }
-                                            />
-                                        </TouchableOpacity>
-                                        {/* <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate("Identification Results")
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="search"
-                                                size={30}
-                                                color={defaultStyles.colors.primary}
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate("Plant Profile")
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="search"
-                                                size={30}
-                                                color={defaultStyles.colors.primary}
-                                            />
-                                        </TouchableOpacity> */}
-                                    </>
-                                ) : (
-                                    <>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "Login"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="arrow-forward"
-                                                size={30}
-                                                color={
-                                                    defaultStyles.colors.primary
-                                                }
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                props.navigation.navigate(
-                                                    "Sign Up"
-                                                )
-                                            }
-                                        >
-                                            <MaterialIcons
-                                                name="person-add"
-                                                size={30}
-                                                color={
-                                                    defaultStyles.colors.primary
-                                                }
-                                            />
-                                        </TouchableOpacity>
-                                    </>
-                                )}
+                                            >
+                                                <MaterialIcons
+                                                    name="person-add"
+                                                    size={30}
+                                                    color={
+                                                        defaultStyles.colors.primary
+                                                    }
+                                                />
+                                            </TouchableOpacity>
+                                        </>
+                                    )}
                             </View>
                         )}
                     >
@@ -291,12 +290,8 @@ export default function App() {
                                     component={SearchScreen}
                                 />
                                 <Tab.Screen
-                                    name="Identification Results"
-                                    component={IdentificationResultsScreen}
-                                />
-                                <Tab.Screen
-                                    name="Plant Profile"
-                                    component={PlantProfileScreen}
+                                    name="Diagnosis Results"
+                                    component={PotatoDiagnosisResultsScreen}
                                 />
 
                             </>

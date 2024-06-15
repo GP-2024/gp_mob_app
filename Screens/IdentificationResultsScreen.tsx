@@ -99,7 +99,7 @@ function extractNameAndDescription(item) {
     return [mainName, description];
 }
 
-const IdentificationResultsScreen = () => {
+const IdentificationResultsScreen = ({navigation}) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [plantsData, setPlantsData] = useState([]);
     const [timer, setTimer] = useState(null);
@@ -152,25 +152,12 @@ const IdentificationResultsScreen = () => {
             itemDescription={item.scientific_name}
             isAdded={item.isAdded}
             percentage={item.percentage}
+            navigation={navigation}
         />
     );
 
     return (
         <SafeAreaView style={styles.outerContainer}>
-            {/* <View style={styles.searchSection}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Search for a plant"
-                    onChangeText={(inputString) => setSearchQuery(inputString)}
-                    underlineColorAndroid="transparent"
-                />
-                <Icon
-                    style={styles.searchIcon}
-                    name="magnifying-glass"
-                    size={20}
-                    color="#666666"
-                />
-            </View> */}
             <FlatList
                 data={demoIdentificationResults}
                 renderItem={gridRenderItem}
@@ -217,10 +204,10 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
         paddingHorizontal: 18,
         paddingTop: 19,
-
+        
         // borderWidth: 1,
         // borderColor: 'black',
-        margin: 3,
+        margin: 0,
     },
     topBanner: {
         flex: 3.5,

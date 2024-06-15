@@ -9,11 +9,13 @@ import {
     TouchableWithoutFeedback,
     Animated,
     Alert,
+    Modal
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import defaultStyles from "../config/styles";
 import { addPlantToCollection } from "./auth";
 import { getAccessToken } from "./useAuth";
+import PlantProfileScreen from "../Screens/PlantProfileScreen"
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -27,10 +29,13 @@ const PlantResultItemCard = ({
     itemID,
     isAdded,
     percentage,
+    navigation
 }) => {
     const [added, setAdded] = useState(isAdded);
     const [loading, setLoading] = useState(false);
+    const [modalShown, setModalShown] = useState(false);
     const scaleValue = new Animated.Value(1);
+    
 
     useEffect(() => {
         setAdded(isAdded);
@@ -96,6 +101,7 @@ const PlantResultItemCard = ({
             alignItems: 'center',
             justifyContent: 'center',
         }}>
+
             <View style={styles.card}>
                 <Image
                     style={styles.cardImageStyle}
@@ -119,6 +125,7 @@ const PlantResultItemCard = ({
                                 "User has requested to learn more about item:",
                                 itemID
                             );
+                            setModalShown(true);
                             // addPlantToUserCollection(itemID);
                         }}
                         onPressIn={handlePressIn}
@@ -133,11 +140,20 @@ const PlantResultItemCard = ({
                                 },
                             ]}
                         >
-                            <Text style={{color:'white'}}>Learn More</Text>
+                            <Text style={{ color: 'white' }}>Learn More</Text>
                         </Animated.View>
                     </TouchableWithoutFeedback>
                 </View>
             </View>
+
+            <Modal
+                visible={modalShown}
+            >
+                <View style={{flex:1}} >
+                    <PlantProfileScreen plantID={itemID} modalSetter={setModalShown} ></PlantProfileScreen>
+                </View>
+            </Modal>
+
         </View>
     );
 };

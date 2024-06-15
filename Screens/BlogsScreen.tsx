@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
         paddingHorizontal: 18,
         paddingTop: 19,
-        margin: 3,
+        margin: 0,
     },
     container: {
         flex: 1,
