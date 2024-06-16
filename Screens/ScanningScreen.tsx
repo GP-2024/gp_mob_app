@@ -1,122 +1,117 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Alert, Modal, Button, ActivityIndicator, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+    StyleSheet,
+    View,
+    Text,
+    Pressable,
+    Alert,
+    Modal,
+    ActivityIndicator,
+    TouchableOpacity,
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome6";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import { ProgressBar } from "react-native-paper";
+
 import defaultStyles from "../config/styles";
 import Separator from "../components/lists/Separator";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import axios from 'axios';
-import * as ImagePicker from 'expo-image-picker';
-import PotatoDiagnosisResultsScreen from "./PotatoDiagnosisResultsScreen"
-import TomatoDiagnosisResultsScreen from './TomatoDiagnosisResultsScreen';
-
-// const screenWidth = Dimensions.get("window").width;
-// const screenHeight = Dimensions.get("window").height;
+import PotatoDiagnosisResultsScreen from "./PotatoDiagnosisResultsScreen";
+import TomatoDiagnosisResultsScreen from "./TomatoDiagnosisResultsScreen";
 
 const ScanningScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [diagnosedImageURI, setDiagnosedImageURI] = useState("");
     const [diagnosisResult, setDiagnosisResult] = useState();
     const [loading, setLoading] = useState(false);
-    const [potatoMode, setPotatoMode] = useState(false); // if true, user is diagnosing potato, if false, it is tomato
+    const [progress, setProgress] = useState(0);
+    const [potatoMode, setPotatoMode] = useState(false); // true if diagnosing potato, false for tomato
     const [cropAskerVisible, setCropAskerVisible] = useState(false);
 
-    let timer;
     const handlePress = async (crop) => {
-
-
+        let timer;
 
         try {
-            // Request camera permissions
-            const { status } = await ImagePicker.requestCameraPermissionsAsync();
-            if (status !== 'granted') {
-                console.log('Camera permission not granted');
-                Alert.alert("", "Diagnosis failed, please enable camera permission and try again.");
-                clearTimeout(timer);
-                setLoading(false);
-                setModalVisible(false);
+            const { status } =
+                await ImagePicker.requestCameraPermissionsAsync();
+            if (status !== "granted") {
+                Alert.alert(
+                    "",
+                    "Diagnosis failed, please enable camera permission and try again."
+                );
                 return;
             }
 
-            // Launch the camera to take a picture
             const result = await ImagePicker.launchCameraAsync({
                 allowsEditing: true,
                 aspect: [1, 1],
                 quality: 1,
             });
 
-            if (!result.canceled) {
-                console.log('Image taken successfully');
+            if (result.canceled) {
+                Alert.alert(
+                    "",
+                    "Diagnosis canceled, camera capture was not completed."
+                );
+                return;
+            }
 
-                setLoading(true);
+            setLoading(true);
+            setProgress(0);
+            const cancelTokenSource = axios.CancelToken.source();
+            timer = setTimeout(
+                () => cancelTokenSource.cancel("Request took too long!"),
+                100000
+            );
 
-                let cancelTokenSource = axios.CancelToken.source();
+            const imageUri = result.assets[0].uri;
+            const manipulatedImage = await ImageManipulator.manipulateAsync(
+                imageUri,
+                [{ resize: { width: 800 } }],
+                { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+            );
 
-                timer = setTimeout(() => {
-                    cancelTokenSource.cancel("Request took too long time!");
-                }, 100000); // 1 hundred seconds
+            const formData = new FormData();
+            formData.append("file", {
+                uri: manipulatedImage.uri,
+                name: "leaf.jpg",
+                type: "image/jpeg",
+            });
 
-                // Convert image to JPEG if necessary
-                const imageUri = result.assets[0].uri;
-                console.log("Image URI: ", imageUri);
+            const requestURL = `https://detection-graduation.onrender.com/predict/${crop}`;
+            console.log(requestURL);
+            const response = await axios.post(requestURL, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                cancelToken: cancelTokenSource.token,
+                onUploadProgress: (progressEvent) => {
+                    const progressPercent = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProgress(progressPercent);
+                },
+            });
 
-                const imageType = 'image/jpeg';
-
-                // Create form data
-                const formData = new FormData();
-                formData.append('file', {
-                    uri: imageUri,
-                    name: 'leaf.jpg',
-                    type: imageType,
-                });
-
-                let requestURL = 'https://final-detect-1.onrender.com/predict/' + crop;
-                // Send the image to the endpoint
-                const response = await axios.post(requestURL, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                    cancelToken: cancelTokenSource.token
-                });
-                console.log(requestURL);
-                if (response.status === 200) {
-                    console.log('Request successful', response.data);
-                    setDiagnosedImageURI(imageUri);
-                    setDiagnosisResult(response.data);
-                    setModalVisible(true);
-                    clearTimeout(timer);
-                } else {
-                    console.log('Request failed with status', response.status);
-                    clearTimeout(timer);
-                    setLoading(false);
-                    setModalVisible(false);
-                    Alert.alert("", "Diagnosis failed because the request failed with status: " + response.status);
-                }
+            if (response.status === 200 && response.data) {
+                setDiagnosedImageURI(manipulatedImage.uri);
+                setDiagnosisResult(response.data);
+                setModalVisible(true);
             } else {
-                console.log('Image capture cancelled');
-                clearTimeout(timer);
-                setLoading(false);
-                setModalVisible(false);
-                Alert.alert("", "Diagnosis failed, You have cancelled camera capture.");
+                Alert.alert(
+                    "",
+                    `Diagnosis failed with status: ${response.status}`
+                );
             }
         } catch (error) {
-            console.error('Error during diagnosis:', error);
-            setModalVisible(false);
             if (axios.isCancel(error)) {
-                clearTimeout(timer);
-                setLoading(false);
-                setModalVisible(false);
-                Alert.alert("", "Diagnosis failed, request took too long time!.");
-
+                Alert.alert("", "Diagnosis failed, request took too long!");
             } else {
-                clearTimeout(timer);
-                setLoading(false);
-                setModalVisible(false);
                 Alert.alert("", "Diagnosis failed, try again later.");
             }
         } finally {
             clearTimeout(timer);
             setLoading(false);
-            // setModalVisible(false);
         }
     };
 
@@ -126,62 +121,60 @@ const ScanningScreen = () => {
                 <View style={styles.loadingOverlay}>
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size="large" color="green" />
+                        <ProgressBar
+                            progress={progress / 100}
+                            color="green"
+                            style={styles.progressBar}
+                        />
+                        <Text>{`Uploading... ${progress}%`}</Text>
                     </View>
                 </View>
             )}
-            {cropAskerVisible && (<View style={styles.loadingOverlay}>
-                <View style={{
-                    width: 220,
-                    height: 160,
-                    backgroundColor: "white",
-                    paddingTop: 30,
-                    borderRadius: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}>
-                    <TouchableOpacity
-                        onPress={() => { { setCropAskerVisible(false) } }}
-                        style={styles.closeButton}>
-                        <Icon
-                            name="xmark"
-                            size={10}
-                            color="white"
-                        />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            setPotatoMode(true);
-                            setCropAskerVisible(false);
-                            handlePress("potato");
-
-                        }}
-                        style={styles.buttonSmall}>
-                        <Text style={styles.buttonTextSmall}>Diagnose Potato</Text>
-                    </TouchableOpacity>
-
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            setPotatoMode(false);
-                            setCropAskerVisible(false);
-                            handlePress("tomato");
-                        }}
-                        style={styles.buttonSmall}>
-                        <Text style={styles.buttonTextSmall}>Diagnose Tomato</Text>
-                    </TouchableOpacity>
-
+            {cropAskerVisible && (
+                <View style={styles.loadingOverlay}>
+                    <View style={styles.cropAskerContainer}>
+                        <TouchableOpacity
+                            onPress={() => setCropAskerVisible(false)}
+                            style={styles.closeButton}
+                        >
+                            <Icon name="xmark" size={10} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setPotatoMode(true);
+                                setCropAskerVisible(false);
+                                handlePress("potato");
+                            }}
+                            style={styles.buttonSmall}
+                        >
+                            <Text style={styles.buttonTextSmall}>
+                                Diagnose Potato
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setPotatoMode(false);
+                                setCropAskerVisible(false);
+                                handlePress("tomato");
+                            }}
+                            style={styles.buttonSmall}
+                        >
+                            <Text style={styles.buttonTextSmall}>
+                                Diagnose Tomato
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>)}
+            )}
             <View style={styles.buttonContainer}>
                 <Pressable
                     style={({ pressed }) => [
+                        styles.button,
                         {
                             backgroundColor: pressed
                                 ? "rgba(0,0,0,0.1)"
                                 : defaultStyles.colors.primary,
                         },
-                        styles.button,
                     ]}
                     onPress={() =>
                         Alert.alert(
@@ -200,16 +193,11 @@ const ScanningScreen = () => {
                     </View>
                 </Pressable>
             </View>
-
             <Separator />
-
             <View style={styles.buttonContainer}>
                 <Pressable
                     style={styles.button}
-                    onPress={() => {
-                        setCropAskerVisible(true);
-                    }
-                    }
+                    onPress={() => setCropAskerVisible(true)}
                 >
                     <View style={styles.buttonContent}>
                         <MaterialCommunityIcons
@@ -220,26 +208,22 @@ const ScanningScreen = () => {
                         <Text style={styles.buttonText}>Diagnose a Plant</Text>
                     </View>
                 </Pressable>
-
             </View>
-            <Modal
-                visible={modalVisible}
-            >
-                <View style={{ flex: 1 }} >
+            <Modal visible={modalVisible}>
+                <View style={{ flex: 1 }}>
                     {potatoMode ? (
                         <PotatoDiagnosisResultsScreen
                             DiagnosedImage={diagnosedImageURI}
                             diagnosisResults={diagnosisResult}
-                            modalSetter={setModalVisible}>
-                        </PotatoDiagnosisResultsScreen>
+                            modalSetter={setModalVisible}
+                        />
                     ) : (
                         <TomatoDiagnosisResultsScreen
                             DiagnosedImage={diagnosedImageURI}
                             diagnosisResults={diagnosisResult}
-                            modalSetter={setModalVisible}>
-                        </TomatoDiagnosisResultsScreen>
+                            modalSetter={setModalVisible}
+                        />
                     )}
-
                 </View>
             </Modal>
         </View>
@@ -278,94 +262,41 @@ const styles = StyleSheet.create({
         height: 20,
         color: "black",
     },
-    ///////////////////////
-    containerxyz: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    centeredViewxyz: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalViewxyz: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-
     loadingOverlay: {
-
         position: "absolute",
-
         top: 0,
-
         left: 0,
-
         right: 0,
-
         bottom: 0,
-
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-
         justifyContent: "center",
-
         alignItems: "center",
-
         zIndex: 1,
-
     },
-
     loadingContainer: {
-
         width: 150,
-
         height: 150,
-
         backgroundColor: "white",
-
         borderRadius: 10,
-
         justifyContent: "center",
-
         alignItems: "center",
-
+        padding: 10,
     },
-    diagnosedCropButtons: {
-
-        position: "absolute",
-
-        top: 0,
-
-        left: 0,
-
-        right: 0,
-
-        bottom: 0,
-
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-
+    progressBar: {
+        width: "100%",
+        marginVertical: 10,
+    },
+    cropAskerContainer: {
+        width: 220,
+        height: 160,
+        backgroundColor: "white",
+        paddingTop: 30,
+        borderRadius: 10,
         justifyContent: "center",
-
         alignItems: "center",
-
-        zIndex: 1,
-
     },
     buttonSmall: {
-        backgroundColor: 'green',
+        backgroundColor: "green",
         borderRadius: 5,
         paddingVertical: 10,
         paddingHorizontal: 20,
@@ -373,23 +304,21 @@ const styles = StyleSheet.create({
         minWidth: 190,
     },
     buttonTextSmall: {
-        color: 'white',
+        color: "white",
         fontSize: 16,
-        textAlign: 'center',
-
+        textAlign: "center",
     },
     closeButton: {
-        position: 'absolute',
+        position: "absolute",
         top: 10,
         right: 15,
         width: 25,
         height: 25,
         borderRadius: 15,
-        backgroundColor: 'grey',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: "grey",
+        justifyContent: "center",
+        alignItems: "center",
     },
-    /////////////////////
 });
 
 export default ScanningScreen;
