@@ -40,7 +40,7 @@ const ScanningScreen = () => {
             // Launch the camera to take a picture
             const result = await ImagePicker.launchCameraAsync({
                 allowsEditing: true,
-                aspect: [4, 3],
+                aspect: [1, 1],
                 quality: 1,
             });
 
