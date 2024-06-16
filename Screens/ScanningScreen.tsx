@@ -94,9 +94,18 @@ const ScanningScreen = () => {
             });
 
             if (response.status === 200 && response.data) {
-                setDiagnosedImageURI(manipulatedImage.uri);
-                setDiagnosisResult(response.data);
-                setModalVisible(true);
+                // Check if the response contains the specific message
+                if (response.data.message === "Uploaded image is not a leaf.") {
+                    Alert.alert(
+                        "",
+                        "Uploaded image is not a leaf. Please try again with a different image."
+                    );
+                } else {
+                    // Proceed with setting the diagnosis result and showing the modal
+                    setDiagnosedImageURI(manipulatedImage.uri);
+                    setDiagnosisResult(response.data);
+                    setModalVisible(true);
+                }
             } else {
                 Alert.alert(
                     "",
