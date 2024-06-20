@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Dimensions,
     SafeAreaView,
+    Modal
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -14,6 +15,7 @@ import SearchItemCard from "../components/SearchItemCard";
 // const HOST = process.env.HOST;
 const HOST = process.env.HOST;
 import Icon from "react-native-vector-icons/FontAwesome6";
+import PlantProfileScreen from "./PlantProfileScreen";
 
 const SEARCH_API_URL = `${HOST}/perenual/plants-details`;
 
@@ -59,6 +61,8 @@ const SearchScreen = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [plantsData, setPlantsData] = useState([]);
     const [timer, setTimer] = useState(null);
+    const [modalShown, setModalShown] = useState(false);
+    const [requestedItemID, setRequestedItemID] = useState('');
 
     useEffect(() => {
         if (timer) {
@@ -106,6 +110,8 @@ const SearchScreen = () => {
             }
             itemDescription={item.scientific_name}
             isAdded={item.isAdded}
+            requestedItemSetter={setRequestedItemID}
+            modalSetter={setModalShown}
         />
     );
 
@@ -131,6 +137,13 @@ const SearchScreen = () => {
                 keyExtractor={(item) => item.id}
                 numColumns={1}
             />
+            <Modal
+                visible={modalShown}
+            >
+                <View style={{ flex: 1 }} >
+                    <PlantProfileScreen plantID={requestedItemID} modalSetter={setModalShown} ></PlantProfileScreen>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 };

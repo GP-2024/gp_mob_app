@@ -16,6 +16,8 @@ import BlogsScreen from "./Screens/BlogsScreen";
 import PlantProfileScreen from "./Screens/PlantProfileScreen";
 import IdentificationResultsScreen from "./Screens/IdentificationResultsScreen";
 import PotatoDiagnosisResultsScreen from "./Screens/PotatoDiagnosisResultsScreen";
+import TesterModalScreen from "./Screens/TesterModalScreen";
+
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -23,6 +25,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import defaultStyles from "./config/styles";
 
 import Spinner from "react-native-loading-spinner-overlay";
+
 
 import useAuth from "./components/useAuth";
 import { storeTokens, clearTokens } from "./components/auth";
@@ -217,15 +220,21 @@ export default function App() {
                                                 </TouchableOpacity>
                                                 {/* <TouchableOpacity
                                                     onPress={() =>
-                                                        props.navigation.navigate("Diagnosis Results")
+                                                        props.navigation.navigate(
+                                                            "TesterModalScreen"
+                                                        )
                                                     }
+
                                                 >
                                                     <MaterialIcons
                                                         name="search"
                                                         size={30}
-                                                        color={defaultStyles.colors.primary}
+                                                        color={
+                                                            defaultStyles.colors.primary
+                                                        }
                                                     />
                                                 </TouchableOpacity> */}
+
                                             </>
                                         )
                                         :
@@ -292,6 +301,10 @@ export default function App() {
                                 <Tab.Screen
                                     name="Diagnosis Results"
                                     component={PotatoDiagnosisResultsScreen}
+                                />
+                                <Tab.Screen
+                                    name="TesterModalScreen"
+                                    component={TesterModalScreen}
                                 />
 
                             </>

@@ -11,67 +11,100 @@ import {
   Button,
   Text,
   Pressable,
+
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { Button, Text, Input, CheckBox, LinearGradient } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+const HOST = process.env.HOST;
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import defaultStyles from "../config/styles";
-import useAuth from '../components/useAuth';
-
-
+import useAuth, { getAccessToken } from '../components/useAuth';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { getAccessToken, } from '../components/useAuth';
 
-// const storeData = async (value) => {
-//   try {
-//     const jsonValue = JSON.stringify(value);
-//     await AsyncStorage.setItem('app_data', jsonValue);
-//   } catch (e) {
-//     // saving error
-//     console.log(e)
-//   }
-// };
+async function getUserProfile(accessToken) {
+  const url = `${HOST}/auth/local/myProfile`;
 
-// const getData = async () => {
-//   try {
-//     const jsonValue = await AsyncStorage.getItem('app_data');
-//     if (jsonValue != null) {
-//       console.log("=============");
-//       console.log(JSON.parse(jsonValue));
-//       console.log("=============");
-//       return JSON.parse(jsonValue);
-//     } else {
-//       console.log("=============");
-//       console.log(null);
-//       console.log("=============");
-//       return null;
-//     }
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
-//   } catch (e) {
-//     // error reading value
-//   }
-// };
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data && data.metadata) {
+      console.log(data.metadata);
+      return data.metadata;
+    } else {
+      throw new Error('Invalid response format');
+    }
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    Alert.alert('Error', 'Failed to fetch profile information');
+    return null;
+  }
+}
+
+// "lastName" in metadata 
+// 'firstName' in metadata
+// "profileIMG" in metadata
 
 // Define the ProfileScreen component
-const ProfileScreen = () => {
-  const {  login, logout } = useAuth();
+const ProfileScreen = ({ navigation }) => {
+  const { login, logout } = useAuth();
   // State variables for handling user input
+  const [pfpURL, setPfpURL] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
-  // Function to handle the login button press
-  const handleLogin = () => {
-    // Add your login logic here
-    console.log('Login button pressed');
 
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = await getAccessToken();
+      getUserProfile(token).then(metadata => {
+        if (metadata) {
+          console.log("profile data was found. cool!");
+          // Handle the metadata
+          setEmail("email" in metadata? metadata.email:"N/A");
+          setUsername("username" in metadata? metadata.username:"N/A");
+          setFirstName("firstName" in metadata? metadata.firstName:"N/A");
+          setLastName("lastName" in metadata? metadata.lastName:"N/A");
+          setPfpURL("profileIMG" in metadata? metadata.profileIMG:"https://i.postimg.cc/05VCCrw1/pfp-Vector.png");
+        }
+      });
+    };
+
+    fetchProfile();
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      // The screen is focused
+      // Call any action and update data
+      fetchProfile();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+
 
   return (
     <SafeAreaView style={styles.outerContainer} >
@@ -106,13 +139,13 @@ const ProfileScreen = () => {
           <View style={styles.pfpContainerStyle}>
             <Image style={styles.imageStyle}
               source={{
-                uri: 'https://images.pexels.com/photos/1520760/pexels-photo-1520760.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&dpr=1'
+                uri: pfpURL
               }}
             />
           </View>
 
           <View style={styles.nameContainerStyle}>
-            <Text style={styles.h4}>Justine Freeman </Text>
+            <Text style={styles.h4}>{firstName+" "+lastName}</Text>
             {/* <Button buttonStyle={styles.nameEditButtonStyle}
               color="transparent">
               <Icon
@@ -124,7 +157,7 @@ const ProfileScreen = () => {
           </View>
 
           <View style={styles.bioContainerStyle}>
-            <Text style={styles.valueStyle}>Student and plant care nerd! </Text>
+            {/* <Text style={styles.valueStyle}>Student and plant care nerd! </Text> */}
             {/* <Button buttonStyle={styles.nameEditButtonStyle}
               color="transparent">
               <Icon
@@ -138,7 +171,7 @@ const ProfileScreen = () => {
           <View style={styles.labelValueStyle}>
             <Text style={styles.labelStyle}>Email </Text>
             <View style={styles.valueContainerStyle}>
-              <Text style={styles.valueStyle}>example@mail.com </Text>
+              <Text style={styles.valueStyle}>{email}</Text>
               {/* <Button buttonStyle={styles.nameEditButtonStyle}
               color="transparent">
               <Icon
@@ -153,7 +186,7 @@ const ProfileScreen = () => {
           <View style={styles.labelValueStyle}>
             <Text style={styles.labelStyle}>Username </Text>
             <View style={styles.valueContainerStyle}>
-              <Text style={styles.valueStyle}>plant_owner112 </Text>
+              <Text style={styles.valueStyle}>{username}</Text>
               {/* <Button buttonStyle={styles.nameEditButtonStyle}
                 color="transparent">
                 <Icon

@@ -1,4 +1,4 @@
-import { View, Image, Dimensions, Text, StyleSheet } from "react-native";
+import { View, Image, Dimensions, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import defaultStyles from "../config/styles";
 import ShortDescriptionViewer from "./ShortDescriptionViewer"
@@ -8,7 +8,7 @@ const screenHeight = Dimensions.get("window").height;
 const widthFactor = 0.9;
 const heightFactor = 0.4;
 
-const ItemCard = ({ itemImageUrl, itemName, itemDescriptionDict }) => {
+const ItemCard = ({ itemID,itemImageUrl, itemName, itemDescriptionDict,requestedItemSetter,modalSetter }) => {
     return (
 
         <View style={{
@@ -16,7 +16,17 @@ const ItemCard = ({ itemImageUrl, itemName, itemDescriptionDict }) => {
             justifyContent: 'center',
         }}>
 
-            <View style={styles.card}>
+            <Pressable
+            onPress={() => {
+                console.log(
+                    "Item:",
+                    itemID,
+                    "is asked to be viewed in details..."
+                );
+                requestedItemSetter(itemID);
+                modalSetter(true);
+            }}
+            style={styles.card}>
                 <Image
                     style={styles.cardImageStyle}
                     source={{
@@ -27,7 +37,7 @@ const ItemCard = ({ itemImageUrl, itemName, itemDescriptionDict }) => {
                     <Text style={styles.h5}>{itemName}</Text>
                     <ShortDescriptionViewer characteristics={itemDescriptionDict}></ShortDescriptionViewer>
                 </View>
-            </View>
+            </Pressable>
         </View>
     );
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Image, ScrollView, StyleSheet, Text, View, Alert, Modal } from "react-native";
 import axios from "axios";
 
 import defaultStyles from "../config/styles";
@@ -14,6 +14,8 @@ import AppText from "../components/AppText";
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import useAuth from '../components/useAuth';
+
+import CompleteProfileScreen from "./CompleteProfileScreen";
 
 // const HOST = process.env.HOST;
 const HOST = process.env.HOST;
@@ -35,39 +37,43 @@ function logCurrentTime() {
     console.log(`Current time: ${hours}:${minutes}:${seconds}`);
 }
 
-// const getData = async () => {
-//     try {
-//         const jsonValue = await AsyncStorage.getItem('app_data');
-//         if (jsonValue != null) {
-//             logCurrentTime();
-//             console.log("======login.tsx=======");
-//             console.log(JSON.parse(jsonValue));
-//             console.log("=============");
-//             return JSON.parse(jsonValue);
-//         } else {
-//             console.log("=============");
-//             console.log(null);
-//             console.log("=============");
-//             return null;
-//         }
+async function getUserProfile(accessToken) {
+    const url = `${HOST}/auth/local/myProfile`;
 
-//     } catch (e) {
-//         // error reading value
-//     }
-// };
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-// const storeData = async (value) => {
-//     try {
-//         const jsonValue = JSON.stringify(value);
-//         await AsyncStorage.setItem('app_data', jsonValue);
-//     } catch (e) {
-//         // saving error
-//         console.log(e)
-//     }
-// };
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data && data.metadata) {
+            console.log(data.metadata);
+            return data.metadata;
+        } else {
+            throw new Error('Invalid response format');
+        }
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+        Alert.alert('Error', 'Failed to fetch profile information');
+        return null;
+    }
+}
+
+
+let retrievedLoginResponse;
 
 function LoginScreen(props) {
     const { login, logout } = useAuth();
+    const [modalShown, setModalShown] = useState(false);
     const handleSubmit = async ({ emailOrUsername, password }) => {
         const isEmail = emailOrUsername.includes("@");
         const body = isEmail
@@ -81,8 +87,27 @@ function LoginScreen(props) {
             );
 
             console.log(response.data);
-            // storeData(response.data);
-            login(response.data.tokens.access_token, response.data.tokens.refresh_token);
+            retrievedLoginResponse = response;
+
+            getUserProfile(response.data.tokens.access_token).then(metadata => {
+                if (metadata) {
+                    console.log("profile data was found. cool!");
+                    // Handle the metadata
+                    if ("profileIMG" in metadata &&
+                        "lastName" in metadata &&
+                        'firstName' in metadata
+                    ) {
+                        console.log("profile is complete. Cool!");
+                        login(response.data.tokens.access_token,
+                            response.data.tokens.refresh_token);
+                    } else {
+                        console.log("profile is incomplete. showing profile completion modal!");
+                        setModalShown(true);
+                    }
+                }
+            });
+
+            // login(response.data.tokens.access_token, response.data.tokens.refresh_token);
         } catch (error) {
             console.log(body);
             console.log(error.response.data);
@@ -130,6 +155,18 @@ function LoginScreen(props) {
                     </AppText>
                 </AppForm>
             </ScrollView>
+            <Modal
+                visible={modalShown}
+            >
+                <View style={{ flex: 1 }} >
+                    <CompleteProfileScreen
+                        loginFunction={login}
+                        loginResponse={retrievedLoginResponse}
+                        modalSetter={setModalShown} 
+                        >
+                    </CompleteProfileScreen>
+                </View>
+            </Modal>
         </Screen>
     );
 }

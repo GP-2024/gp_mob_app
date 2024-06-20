@@ -26,6 +26,8 @@ const SearchItemCard = ({
     itemDescription,
     itemID,
     isAdded,
+    requestedItemSetter,
+    modalSetter,
 }) => {
     const [added, setAdded] = useState(isAdded);
     const [loading, setLoading] = useState(false);
@@ -91,7 +93,17 @@ const SearchItemCard = ({
             alignItems: "center",
             justifyContent: 'center',
         }}>
-            <View style={styles.card}>
+            <Pressable 
+            onPress={() => {
+                console.log(
+                    "Item:",
+                    itemID,
+                    "is asked to be viewed in details..."
+                );
+                requestedItemSetter(itemID);
+                modalSetter(true);
+            }}
+            style={styles.card}>
                 <Image
                     style={styles.cardImageStyle}
                     source={{ uri: itemImageUrl }}
@@ -110,6 +122,7 @@ const SearchItemCard = ({
                             );
                             addPlantToUserCollection(itemID);
                         }}
+                        style={{ zIndex: 2 }}
                         onPressIn={handlePressIn}
                         onPressOut={handlePressOut}
                     >
@@ -134,7 +147,7 @@ const SearchItemCard = ({
                         </Animated.View>
                     </TouchableWithoutFeedback>
                 </View>
-            </View>
+            </Pressable>
         </View>
     );
 };
@@ -147,6 +160,7 @@ const styles = StyleSheet.create({
         minHeight: screenHeight * heightFactor,
         alignItems: "center",
         justifyContent: 'center',
+        zIndex: 1,
 
         backgroundColor: "#f9f9f9",
         marginBottom: 15,
