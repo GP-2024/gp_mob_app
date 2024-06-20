@@ -104,6 +104,9 @@ const ScanningScreen = () => {
                     // Proceed with setting the diagnosis result and showing the modal
                     setDiagnosedImageURI(manipulatedImage.uri);
                     setDiagnosisResult(response.data);
+                    console.log("=====DIAGNOSIS RESULT=====");
+                    console.log(response.data);
+                    console.log("==========================");
                     setModalVisible(true);
                 }
             } else {

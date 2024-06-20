@@ -22,7 +22,7 @@ interface TomatoDiagnosisResultsScreenProps {
         'early-blight' |
         'late-blight' |
         'leaf-mold' |
-        'septoria-leaf-spot' |
+        'septoria-leaf_spot' |
         'spider-mites' |
         'target-spot' |
         'yellow-leaf-curl-virus' |
@@ -40,7 +40,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
 
 }) => {
     diagnosisResults.class=makeLowerCase(diagnosisResults.class);
-    
+
     const closeModal = () => {
         modalSetter(false);
     };
@@ -52,7 +52,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
         "Somewhat Confident",
         "Highly Confident",
     ];
-    const confidenceIndex = Math.floor(diagnosisResults.confidence * 6);
+    const confidenceIndex = diagnosisResults.confidence==1?5: Math.floor(diagnosisResults.confidence * 6);
     const confidenceText = confidenceLevels[confidenceIndex];
 
     const classDescriptions: { [key: string]: string } = {
@@ -60,7 +60,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
         "early-blight": "Early blight is a fungal disease affecting tomato plants, caused by Alternaria species. It results in dark, concentric spots on leaves, stems, and fruit, leading to leaf drop and reduced yield.",
         "late-blight": "Late blight is a serious plant disease caused by the pathogen Phytophthora infestans. It primarily affects tomatoes and potatoes, causing significant crop damage. The disease thrives in cool, moist conditions, leading to rapid plant decay and yield loss.",
         "leaf-mold": "Leaf mold is a fungal disease caused by Passalora fulva. It affects tomato plants, resulting in yellow spots on the upper leaf surface and a velvety, olive-green mold on the underside, which can cause significant leaf loss.",
-        "septoria-leaf-spot": "Septoria leaf spot is a fungal disease caused by Septoria lycopersici. It primarily affects tomato plants, leading to small, circular spots with dark borders and grey centers on leaves, causing premature defoliation.",
+        "septoria-leaf_spot": "Septoria leaf spot is a fungal disease caused by Septoria lycopersici. It primarily affects tomato plants, leading to small, circular spots with dark borders and grey centers on leaves, causing premature defoliation.",
         "spider-mites": "Spider mites are tiny arachnids that feed on tomato plant sap, causing stippling, yellowing, and webbing on leaves. Heavy infestations can lead to significant plant stress and reduced yields.",
         "target-spot": "Target spot is a fungal disease caused by Corynespora cassiicola. It affects tomato plants, leading to dark, concentric spots on leaves, stems, and fruit, which can cause defoliation and fruit rot.",
         "yellow-leaf-curl-virus": "Tomato yellow leaf curl virus (TYLCV) is a viral disease transmitted by whiteflies. It causes yellowing and curling of leaves, stunted growth, and reduced fruit production in tomato plants.",
@@ -73,7 +73,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
         "early-blight": "Early Blight",
         "late-blight": "Late Blight",
         "leaf-mold": "Leaf Mold",
-        "septoria-leaf-spot": "Septoria Leaf Spot",
+        "septoria-leaf_spot": "Septoria Leaf Spot",
         "spider-mites": "Spider Mites",
         "target-spot": "Target Spot",
         "yellow-leaf-curl-virus": "Yellow Leaf Curl Virus",
@@ -86,7 +86,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
         "early-blight": "Your plant shows signs of Early Blight. Prune affected leaves, apply a fungicide, and improve air circulation to prevent further spread. Monitor closely for any changes.",
         "late-blight": "Your plant has Late Blight. Remove and destroy affected areas immediately. Apply a suitable fungicide and avoid overhead watering. Consider isolating the plant to prevent infection of others.",
         "leaf-mold": "Your plant has Leaf Mold. Remove and destroy affected leaves. Ensure proper ventilation and reduce humidity. Apply a fungicide if necessary.",
-        "septoria-leaf-spot": "Your plant has Septoria Leaf Spot. Remove affected leaves and improve air circulation. Apply a fungicide and avoid overhead watering.",
+        "septoria-leaf_spot": "Your plant has Septoria Leaf Spot. Remove affected leaves and improve air circulation. Apply a fungicide and avoid overhead watering.",
         "spider-mites": "Your plant has Spider Mites. Increase humidity around the plant and wash off mites with water. Consider using insecticidal soap or miticides.",
         "target-spot": "Your plant shows signs of Target Spot. Remove and destroy affected leaves. Apply a fungicide and ensure proper spacing and air circulation.",
         "yellow-leaf-curl-virus": "Your plant has Yellow Leaf Curl Virus. Remove infected plants to prevent spread. Control whiteflies and consider using resistant varieties.",
@@ -99,7 +99,7 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
         "early-blight": "Did you know that Early Blight is caused by the fungus Alternaria solani? It thrives in warm, humid conditions and primarily affects older leaves, leading to dark spots and yellowing.",
         "late-blight": "Did you know that Late Blight was responsible for the Irish Potato Famine in the 1840s? Caused by the pathogen Phytophthora infestans, it spreads rapidly in wet, cool conditions.",
         "leaf-mold": "Did you know that Leaf Mold is caused by the fungus Passalora fulva? It spreads in humid conditions and can significantly affect yield if not controlled.",
-        "septoria-leaf-spot": "Did you know that Septoria Leaf Spot is caused by the fungus Septoria lycopersici? It spreads in wet conditions and can cause significant defoliation.",
+        "septoria-leaf_spot": "Did you know that Septoria Leaf Spot is caused by the fungus Septoria lycopersici? It spreads in wet conditions and can cause significant defoliation.",
         "spider-mites": "Did you know that Spider Mites are tiny arachnids that can reproduce rapidly under hot, dry conditions? They can cause extensive damage to plants if not controlled.",
         "target-spot": "Did you know that Target Spot is caused by the fungus Corynespora cassiicola? It can affect a wide range of plants, causing dark, target-like spots on leaves and fruit.",
         "yellow-leaf-curl-virus": "Did you know that Tomato Yellow Leaf Curl Virus is transmitted by whiteflies and can cause significant yield loss in tomato plants? It is a major concern in many tomato-growing regions.",
@@ -113,13 +113,14 @@ const TomatoDiagnosisResultsScreen: React.FC<TomatoDiagnosisResultsScreenProps> 
         "early-blight": "#FFA500",
         "late-blight": "#8B4513",
         "leaf-mold": "#808080",
-        "septoria-leaf-spot": "#A52A2A",
+        "septoria-leaf_spot": "#A52A2A",
         "spider-mites": "#FF4500",
         "target-spot": "#8B0000",
         "yellow-leaf-curl-virus": "#FFFF00",
         "mosaic-virus": "#00FF00",
     };
 
+    
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

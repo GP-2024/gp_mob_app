@@ -69,7 +69,7 @@ async function getUserProfile(accessToken) {
 const ProfileScreen = ({ navigation }) => {
   const { login, logout } = useAuth();
   // State variables for handling user input
-  const [pfpURL, setPfpURL] = useState('');
+  const [pfpURL, setPfpURL] = useState('https://i.postimg.cc/05VCCrw1/pfp-Vector.png');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

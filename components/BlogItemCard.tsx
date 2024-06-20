@@ -65,11 +65,11 @@ const BlogItemCard = ({
                 </Text>
                 <View style={styles.metaDataContainer}>
                     <View style={styles.metaDataItem}>
-                        <Icon name={"thumbs-up"} size={15} color="#666" />
+                        <Icon name={"thumbs-up"} size={15} color="#666" solid />
                         <Text style={styles.metaDataText}> {itemNOfLikes}</Text>
                     </View>
                     <View style={styles.metaDataItem}>
-                        <Icon name={"comment"} size={15} color="#666" />
+                        <Icon name={"comment"} size={15} color="#666" solid/>
                         <Text style={styles.metaDataText}>
                             {" "}
                             {itemNOfComments}

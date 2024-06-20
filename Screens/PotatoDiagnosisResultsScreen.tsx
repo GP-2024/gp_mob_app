@@ -98,6 +98,11 @@ const PotatoDiagnosisResultsScreen: React.FC<
         potato___late_blight: "#8B4513",
     };
 
+    console.log("=====DIAGNOSIS RESULT=====");
+    console.log("CLASS: ",diagnosisResults.class);
+    console.log("CONF.: ",diagnosisResults.confidence);
+    console.log("==========================");
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.heading}>Diagnosis Results</Text>
