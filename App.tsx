@@ -218,7 +218,7 @@ export default function App() {
                                                         }
                                                     />
                                                 </TouchableOpacity>
-                                                <TouchableOpacity
+                                                {/* <TouchableOpacity
                                                     onPress={() =>
                                                         props.navigation.navigate(
                                                             "Identification Results"
@@ -233,7 +233,7 @@ export default function App() {
                                                             defaultStyles.colors.primary
                                                         }
                                                     />
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
 
                                             </>
                                         )
