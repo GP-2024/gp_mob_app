@@ -218,10 +218,10 @@ export default function App() {
                                                         }
                                                     />
                                                 </TouchableOpacity>
-                                                {/* <TouchableOpacity
+                                                <TouchableOpacity
                                                     onPress={() =>
                                                         props.navigation.navigate(
-                                                            "TesterModalScreen"
+                                                            "Identification Results"
                                                         )
                                                     }
 
@@ -233,7 +233,7 @@ export default function App() {
                                                             defaultStyles.colors.primary
                                                         }
                                                     />
-                                                </TouchableOpacity> */}
+                                                </TouchableOpacity>
 
                                             </>
                                         )
@@ -299,12 +299,8 @@ export default function App() {
                                     component={SearchScreen}
                                 />
                                 <Tab.Screen
-                                    name="Diagnosis Results"
-                                    component={PotatoDiagnosisResultsScreen}
-                                />
-                                <Tab.Screen
-                                    name="TesterModalScreen"
-                                    component={TesterModalScreen}
+                                    name="Identification Results"
+                                    component={IdentificationResultsScreen}
                                 />
 
                             </>

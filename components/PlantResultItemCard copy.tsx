@@ -15,7 +15,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import defaultStyles from "../config/styles";
 import { addPlantToCollection } from "./auth";
 import { getAccessToken } from "./useAuth";
-import IdentifiedPlantProfileScreen from "../Screens/IdentifiedPlantProfileScreen"
+import PlantProfileScreen from "../Screens/PlantProfileScreen"
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -26,16 +26,56 @@ const PlantResultItemCard = ({
     itemImageUrl,
     itemName,
     itemDescription,
-    itemLongDescription,
     itemID,
+    isAdded,
     percentage,
-    wikipediaToPlant
+    navigation
 }) => {
-
+    const [added, setAdded] = useState(isAdded);
     const [loading, setLoading] = useState(false);
     const [modalShown, setModalShown] = useState(false);
     const scaleValue = new Animated.Value(1);
     
+
+    useEffect(() => {
+        setAdded(isAdded);
+    }, [isAdded]);
+
+    const addPlantToUserCollection = async (plantId) => {
+        try {
+            setLoading(true);
+            const authToken = await getAccessToken();
+
+            if (!authToken) {
+                throw new Error("Access token not found to add plant.");
+            }
+
+            const result = await addPlantToCollection(plantId, authToken);
+            console.log("Plant added successfully:", result, "\n");
+            setAdded(true); // Update added state upon successful addition
+            Alert.alert("Success", "Plant added to your collection!");
+        } catch (error) {
+            console.error("Error adding plant to collection:", error);
+            let errorMessage = "Failed to add plant to collection.";
+
+            if (error.response) {
+                const { message, statusCode } = error.response.data;
+                if (
+                    statusCode === 400 &&
+                    message === "Plant already added to your plants"
+                ) {
+                    errorMessage = "This plant is already in your collection.";
+                } else {
+                    errorMessage = message;
+                }
+            }
+
+            Alert.alert("Error", errorMessage);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handlePressIn = () => {
         Animated.spring(scaleValue, {
             toValue: 0.95,
@@ -86,6 +126,7 @@ const PlantResultItemCard = ({
                                 itemID
                             );
                             setModalShown(true);
+                            // addPlantToUserCollection(itemID);
                         }}
                         onPressIn={handlePressIn}
                         onPressOut={handlePressOut}
@@ -109,14 +150,7 @@ const PlantResultItemCard = ({
                 visible={modalShown}
             >
                 <View style={{flex:1}} >
-                    <IdentifiedPlantProfileScreen
-                    plantID={itemID}
-                    longDescription={itemLongDescription}
-                    SciName={itemDescription}
-                    wikiToPlant={wikipediaToPlant}
-                    imageURL={itemImageUrl}
-                    commonName={itemName}
-                    modalSetter={setModalShown} ></IdentifiedPlantProfileScreen>
+                    <PlantProfileScreen plantID={itemID} modalSetter={setModalShown} ></PlantProfileScreen>
                 </View>
             </Modal>
 

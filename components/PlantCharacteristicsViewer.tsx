@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { Text } from 'react-native-paper'
 
 const formatKey = (key) => {
     if (!key) return '';
@@ -17,15 +18,15 @@ const formatValue = (value) => {
     return formatKey(value.toString());
 };
 
-const PlantCharacteristicsViewer = ({ characteristics }) => {
+const PlantCharacteristicsViewer = ({ characteristics, fontSizeProp=15 }) => {
     const renderItem = ({ item }) => (
         <View style={styles.row}>
             <View style={{ width: '50%', alignItems: 'flex-start' }}>
-                <Text style={styles.keyText}>{formatKey(item.key)}</Text>
+                <Text style={[styles.keyText, {fontSize:fontSizeProp}]}>{formatKey(item.key)}</Text>
             </View>
 
             <View style={{ width: '50%',alignItems: 'flex-start' }}>
-                <Text style={styles.valueText}>{formatValue(item.value)}</Text>
+                <Text style={[styles.valueText, {fontSize:fontSizeProp}]}>{formatValue(item.value)}</Text>
             </View>
 
         </View>
@@ -62,12 +63,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
         textAlign: 'left',
-        fontSize: 15,
     },
     valueText: {
         color: 'black',
         textAlign: 'left',
-        fontSize: 15,
     },
     separator: {
         height: 1,

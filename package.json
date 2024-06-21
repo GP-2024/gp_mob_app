@@ -46,7 +46,8 @@
     "react-navigation": "^5.0.0",
     "typescript": "~5.3.3",
     "undefined": "react-native-community/datetimepicker",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "react-native-webview": "13.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

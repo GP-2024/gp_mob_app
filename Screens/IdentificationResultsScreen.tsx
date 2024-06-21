@@ -6,7 +6,9 @@ import {
     StyleSheet,
     Dimensions,
     SafeAreaView,
+    TouchableOpacity,
 } from "react-native";
+import { Text } from 'react-native-paper'
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getAccessToken } from "../components/useAuth";
@@ -22,97 +24,65 @@ const screenHeight = Dimensions.get("window").height;
 const widthFactor = 0.88;
 const heightFactor = 0.09;
 
-let demoIdentificationResults = [
-    {
-        id: 3,
-        common_name: 'Daisy',
-        scientific_name: 'Orchidaceae',
-        isAdded: true,
-        percentage: '45%',
-        default_image: { small_url: 'https://perenual.com/storage/species_image/234_clerodendrum_trichotomum/small/10059423085_a1683382f4_b.jpg' }
-    },
-    {
-        id: 5,
-        common_name: 'Daisy',
-        scientific_name: 'Rosa',
-        isAdded: false,
-        percentage: '41%',
-        default_image: { small_url: 'https://perenual.com/storage/species_image/165_acer_tataricum_garann/small/Acer_tataricum_28fruits29.jpg' }
-    },
-    {
-        id: 4,
-        common_name: 'Sunflower',
-        scientific_name: 'Bellis',
-        isAdded: false,
-        percentage: '17%',
-        default_image: { small_url: 'https://perenual.com/storage/species_image/433_acalypha_hispida/small/20298859928_ac5f7bc791_b.jpg' }
-    },
+let demoIdentificationResultsNew = [
     {
         id: 1,
-        common_name: 'Daisy',
-        scientific_name: 'Orchidaceae',
-        isAdded: false,
-        percentage: '15%',
-        default_image: { small_url: 'https://perenual.com/storage/species_image/1831_chelone_lyonii_hot_lips/small/52391427376_248afde832_b.jpg' }
+        scientific_name: "Fragaria x ananassa",
+        common_name: "Garden Strawberry",
+        probability: "35.03%",
+        description: "The garden strawberry is a widely grown hybrid species of the genus Fragaria, collectively known as the strawberries, which are cultivated worldwide for their fruit. The fruit is widely appreciated for its characteristic aroma, bright red color, juicy texture, and sweetness. It is consumed in large quantities, either fresh or in such prepared foods as jam, juice, pies, ice cream, milkshakes, and chocolates. Artificial strawberry flavorings and aromas are also widely used in products such as candy, soap, lip gloss, perfume, and many others.",
+        description_link: "https://en.wikipedia.org/wiki/Strawberry",
+        images: [
+            "https://fthmb.tqn.com/smOx93Jvi7JguN4uFf9Yv6ck-fY=/2066x1452/filters:fill(auto,1)/Strawberryplant-GettyImages-123533002-5b198b33eb97de0036be58ae.jpg"
+        ]
     },
     {
         id: 2,
-        common_name: 'Daisy',
-        scientific_name: 'Orchidaceae',
-        isAdded: false,
-        percentage: '8%',
-        default_image: { small_url: 'https://perenual.com/storage/species_image/165_acer_tataricum_garann/small/Acer_tataricum_28fruits29.jpg' }
+        scientific_name: "Sideritis dasygnaphala",
+        common_name: "N/A",
+        probability: "11.01%",
+        description: "N/A is a common abbreviation in tables and lists for the phrase not applicable, not available, not assessed, or no answer. It is used to indicate when information in a certain table cell is not provided, either because it does not apply to a particular case in question or because the answer is not available. Such a notation can be used on many different types of forms.",
+        description_link: "https://en.wikipedia.org/wiki/N%2FA",
+        images: [
+            "https://australianteachersmarketplace.com.au/wp-content/uploads/2023/03/Slide3.jpeg"
+        ]
+    },
+    {
+        id: 3,
+        scientific_name: "Allium oschaninii",
+        common_name: "French grey shallot",
+        probability: "9.2%",
+        description: "Description not found",
+        description_link: null,
+        images: [
+            "https://www.adaptiveseeds.com/wp-content/uploads/2014/12/french-grey-shallot-2.jpg"
+        ]
     }
-]
+];
 
 
-function extractNameAndDescription(item) {
-    let mainName = "";
-    let description = "";
 
-    // Determine main name
-    if (item.common_name) {
-        mainName = item.common_name;
-    } else if (item.scientific_name) {
-        mainName = item.scientific_name;
-    } else {
-        mainName = "Unnamed";
-    }
-
-    // Capitalize every word in main name
-    mainName = mainName.replace(/\b\w/g, (char) => char.toUpperCase());
-
-    // Determine description
-    if (!item.common_name && item.scientific_name) {
-        description = item.slug ? `Slug: ${item.slug}` : "Not available";
-    } else if (item.synonyms && item.synonyms.length > 0) {
-        description = `${item.synonyms[0]}`;
-    } else if (item.slug) {
-        description = `Slug: ${item.slug}`;
-    } else {
-        description = "Not available";
-    }
-
-    // Uppercase first letter in description
-    description = description.charAt(0).toUpperCase() + description.slice(1);
-
-    return [mainName, description];
-}
-
-const IdentificationResultsScreen = ({navigation}) => {
+const IdentificationResultsScreen = ({ identificationResult = [], modalSetter, identifiedImage }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [plantsData, setPlantsData] = useState([]);
     const [timer, setTimer] = useState(null);
 
-    useEffect(() => {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        const searchTimer = setTimeout(() => {
-            performSearch();
-        }, 3000);
-        setTimer(searchTimer);
-    }, [searchQuery]);
+    const closeModal = () => {
+        modalSetter(false);
+    };
+
+    // adding an id to the results for the flatlist
+    identificationResult = identificationResult.map((item, index) => {
+        return {
+            id: index + 1,
+            scientific_name: item.scientific_name,
+            common_name: item.common_name,
+            probability: item.probability,
+            description: item.description,
+            description_link: item.description_link,
+            images: item.images
+        };
+    });
 
     const performSearch = async () => {
         if (searchQuery.length > 1) {
@@ -145,25 +115,30 @@ const IdentificationResultsScreen = ({navigation}) => {
             itemID={item.id}
             itemName={item.common_name}
             itemImageUrl={
-                item.default_image
-                    ? item.default_image.small_url
+                item.images
+                    ? item.images[0]
                     : "https://i.postimg.cc/0jyTBx2y/default-Plant-Image.jpg"
             }
             itemDescription={item.scientific_name}
-            isAdded={item.isAdded}
-            percentage={item.percentage}
-            navigation={navigation}
+            percentage={item.probability}
+            itemLongDescription={item.description}
+            wikipediaToPlant={item.description_link}
         />
     );
 
     return (
         <SafeAreaView style={styles.outerContainer}>
+            <Text style={styles.heading}>Identification Results</Text>
             <FlatList
-                data={demoIdentificationResults}
+                data={identificationResult}
                 renderItem={gridRenderItem}
                 keyExtractor={(item) => item.id}
                 numColumns={1}
             />
+            <TouchableOpacity style={styles.floatingButton}
+                onPress={() => { closeModal() }}>
+                <Icon name="xmark" size={20} color="#fff" />
+            </TouchableOpacity>
         </SafeAreaView>
     );
 };
@@ -204,7 +179,7 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
         paddingHorizontal: 18,
         paddingTop: 19,
-        
+
         // borderWidth: 1,
         // borderColor: 'black',
         margin: 0,
@@ -311,6 +286,29 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 39.81 * 0.8,
         fontWeight: "bold",
+    },
+    heading: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        textAlign: 'left',
+    },
+    floatingButton: {
+        position: 'absolute',
+        top: (screenHeight * 0.015),
+        left: screenWidth - (screenWidth * 0.135),
+        width: 40,
+        height: 40,
+        backgroundColor: 'black',
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 5, // for shadow on Android
+        shadowColor: '#000', // for shadow on iOS
+        shadowOffset: { width: 0, height: 2 }, // for shadow on iOS
+        shadowOpacity: 0.8, // for shadow on iOS
+        shadowRadius: 2, // for shadow on iOS
+        opacity: 0.7,
     },
 });
 

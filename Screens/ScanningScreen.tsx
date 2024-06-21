@@ -20,17 +20,21 @@ import defaultStyles from "../config/styles";
 import Separator from "../components/lists/Separator";
 import PotatoDiagnosisResultsScreen from "./PotatoDiagnosisResultsScreen";
 import TomatoDiagnosisResultsScreen from "./TomatoDiagnosisResultsScreen";
+import IdentificationResultsScreen from "./IdentificationResultsScreen";
 
 const ScanningScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [identificationModalVisible, setIdentificationModalVisible] = useState(false);
     const [diagnosedImageURI, setDiagnosedImageURI] = useState("");
     const [diagnosisResult, setDiagnosisResult] = useState();
+    const [identificationImageURI, setIdentificationImageURI] = useState("");
+    const [identificationResult, setidentificationResult] = useState();
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [potatoMode, setPotatoMode] = useState(false); // true if diagnosing potato, false for tomato
     const [cropAskerVisible, setCropAskerVisible] = useState(false);
 
-    const handlePress = async (crop) => {
+    const handleDiagnosisPress = async (crop) => {
         let timer;
 
         try {
@@ -127,6 +131,103 @@ const ScanningScreen = () => {
         }
     };
 
+    const handleIdentificationPress = async () => {
+        let timer;
+
+        try {
+            const { status } =
+                await ImagePicker.requestCameraPermissionsAsync();
+            if (status !== "granted") {
+                Alert.alert(
+                    "",
+                    "Identification failed, please enable camera permission and try again."
+                );
+                return;
+            }
+
+            const result = await ImagePicker.launchCameraAsync({
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+            });
+
+            if (result.canceled) {
+                Alert.alert(
+                    "",
+                    "Identification canceled, camera capture was not completed."
+                );
+                return;
+            }
+
+            setLoading(true);
+            setProgress(0);
+            const cancelTokenSource = axios.CancelToken.source();
+            timer = setTimeout(
+                () => cancelTokenSource.cancel("Request took too long!"),
+                100000
+            );
+
+            const imageUri = result.assets[0].uri;
+            const manipulatedImage = await ImageManipulator.manipulateAsync(
+                imageUri,
+                [{ resize: { width: 800 } }],
+                { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+            );
+
+            const formData = new FormData();
+            formData.append("image", {
+                uri: manipulatedImage.uri,
+                name: "plant.jpg",
+                type: "image/jpeg",
+            });
+
+            const requestURL = `https://final-id.onrender.com/identify-plant-with-images`;
+            console.log(requestURL);
+            const response = await axios.post(requestURL, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                cancelToken: cancelTokenSource.token,
+                onUploadProgress: (progressEvent) => {
+                    const progressPercent = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProgress(progressPercent);
+                },
+            });
+
+            if (response.status === 200 && response.data) {
+                // Check if the response contains the specific message
+                // if (response.data.message === "Uploaded image is not a leaf.") {
+                //     Alert.alert(
+                //         "",
+                //         "Uploaded image is not a leaf. Please try again with a different image."
+                //     );
+                // } else {
+                // Proceed with setting the diagnosis result and showing the modal
+                setIdentificationImageURI(manipulatedImage.uri);
+                setidentificationResult(response.data);
+                console.log("=====Identification RESULT=====");
+                console.log(response.data);
+                console.log("==========================");
+                setIdentificationModalVisible(true);
+                // }
+            } else {
+                Alert.alert(
+                    "",
+                    `Identification failed with status: ${response.status}`
+                );
+            }
+        } catch (error) {
+            if (axios.isCancel(error)) {
+                Alert.alert("", "Identification failed, request took too long!");
+            } else {
+                Alert.alert("", "Identification failed, try again later.");
+            }
+        } finally {
+            clearTimeout(timer);
+            setLoading(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
             {loading && (
@@ -155,7 +256,7 @@ const ScanningScreen = () => {
                             onPress={() => {
                                 setPotatoMode(true);
                                 setCropAskerVisible(false);
-                                handlePress("potato");
+                                handleDiagnosisPress("potato");
                             }}
                             style={styles.buttonSmall}
                         >
@@ -167,7 +268,7 @@ const ScanningScreen = () => {
                             onPress={() => {
                                 setPotatoMode(false);
                                 setCropAskerVisible(false);
-                                handlePress("tomato");
+                                handleDiagnosisPress("tomato");
                             }}
                             style={styles.buttonSmall}
                         >
@@ -189,10 +290,7 @@ const ScanningScreen = () => {
                         },
                     ]}
                     onPress={() =>
-                        Alert.alert(
-                            "",
-                            "App should move you to identification camera!"
-                        )
+                        handleIdentificationPress()
                     }
                 >
                     <View style={styles.buttonContent}>
@@ -236,6 +334,15 @@ const ScanningScreen = () => {
                             modalSetter={setModalVisible}
                         />
                     )}
+                </View>
+            </Modal>
+            <Modal visible={identificationModalVisible}>
+                <View style={{ flex: 1 }}>
+                    <IdentificationResultsScreen
+                        identifiedImage={identificationImageURI}
+                        identificationResult={identificationResult}
+                        modalSetter={setIdentificationModalVisible}
+                    />
                 </View>
             </Modal>
         </View>
