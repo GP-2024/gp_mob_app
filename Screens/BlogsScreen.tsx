@@ -21,109 +21,37 @@ import axios from "axios";
 import { getAccessToken } from "../components/useAuth";
 import BlogItemCard from "../components/BlogItemCard";
 import NewBlogItemCard from "../components/NewBlogItemCard";
-// import { HOST } from "@env";
 const HOST = process.env.HOST;
 import Icon from "react-native-vector-icons/FontAwesome6";
-import { MaterialIcons } from "@expo/vector-icons";
 import defaultStyles from "../config/styles";
 
 import { appContext } from "../App";
 
 import { useToast } from "react-native-toast-notifications";
 
-const SEARCH_API_URL = `${HOST}/perenual/plants-details`;
-
-import { ToastProvider } from "react-native-toast-notifications";
-
 import { useFocusEffect } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
-const widthFactor = 0.88;
-const heightFactor = 0.09;
 
 function DictionarySmallSummaryForDebugging(dictionary) {
-    console.log("===DEBUGGING DICTIONARY===");
     if (dictionary === null) {
-      console.log("The dictionary is null.");
-      return;
+        return;
     }
-  
+
     const keys = Object.keys(dictionary);
     const keyCount = keys.length;
-  
-    if (keyCount === 0) {
-      console.log("The dictionary is empty.");
-    } else if (keyCount <= 3) {
-      console.log("The dictionary has the following keys:", keys.join(", "));
-    } else {
-      const firstThreeKeys = keys.slice(0, 3);
-      console.log(`The dictionary has the following keys: ${firstThreeKeys.join(", ")} and ${keyCount - 3} remaining keys.`);
-    }
-    console.log("==========================");
-  }
 
-var blogs1 = [
-    {
-        id: "bff11d30-a7e7-49ab-bd38-3bbc921c3836",
-        updatedAt: "2024-05-16T02:13:41.464Z",
-        createdAt: "2024-05-16T02:13:41.464Z",
-        deletedAt: null,
-        title: "Orchids: All About Them!",
-        content:
-            "Hey plant lovers! Let's chat about orchids - those cool, exotic flowers that everyone's talking about. From how to care for them to their wild varieties, let's dive in and share our orchid obsessions!",
-    },
-    {
-        id: "c173318e-6c39-4a36-96fc-f3c2b2793351",
-        updatedAt: "2024-05-16T02:15:57.571Z",
-        createdAt: "2024-05-16T02:15:57.571Z",
-        deletedAt: null,
-        title: "Succulent Secrets: Share Yours!",
-        content:
-            "Hey succulent fans! Got any tips or tricks for keeping those cute little plants thriving? Let's spill the succulent secrets and help each other out. Whether you're a newbie or a succulent pro, your insights are golden!",
-    },
-    {
-        id: "d10c695d-08da-41d5-9695-c4dbefba49f0",
-        updatedAt: "2024-05-16T02:16:01.191Z",
-        createdAt: "2024-05-16T02:16:01.191Z",
-        deletedAt: null,
-        title: "Bonsai Bonanza: Let's Talk!",
-        content:
-            "Hey bonsai buddies! Who else is into those tiny trees that pack a big punch? Share your bonsai stories, tips for shaping them just right, or any bonsai blunders you've had. Let's bonsai bonanza!",
-    },
-    {
-        id: "be0e4c2a-00da-4f95-a4f3-78a63d0c3d90",
-        updatedAt: "2024-05-16T02:16:03.333Z",
-        createdAt: "2024-05-16T02:16:03.333Z",
-        deletedAt: null,
-        title: "Fabulous Ferns: Fern Talk!",
-        content:
-            "Fern fanatics, unite! Whether you're a fan of those leafy green beauties indoors or you're all about creating a lush fern-filled garden, let's chat. Share your favorite fern varieties, care tips, or simply geek out about why ferns are fantastic!",
-    },
-    {
-        id: "e12e2d17-e239-45d2-8d05-36358987ab75",
-        updatedAt: "2024-05-16T02:16:32.748Z",
-        createdAt: "2024-05-16T02:16:32.748Z",
-        deletedAt: null,
-        title: "Lovely Lavender: Let's Discuss!",
-        content:
-            "Hey lavender lovers! Who else adores the scent of lavender and all its magical uses? Whether you're growing it in your garden or using it for relaxation, let's share our lavender love. From growing tips to DIY lavender goodies, let's dive into all things lavender!",
-    },
-    {
-        id: "745e395f-e3de-4092-a20c-289a57d74c9d",
-        updatedAt: "2024-05-16T02:36:20.808Z",
-        createdAt: "2024-05-16T02:36:20.808Z",
-        deletedAt: null,
-        title: "Indoor Garden Ideas: Share Yours!",
-        content:
-            "Hey plant pals! Got any cool indoor garden setups or tips for bringing the outdoors in? Whether you're a plant parent with a green thumb or you're just starting, let's swap indoor garden ideas and inspire each other to create lush, green spaces inside our homes!",
-    },
-];
-function truncateString(str) {
-    if (str.length > 150) {
-        return str.substring(0, 150) + "...";
+    if (keyCount === 0) {
+        console.log("The dictionary is empty.");
+    } else if (keyCount <= 3) {
+        console.log("The dictionary has the following keys:", keys.join(", "));
     } else {
-        return str;
+        const firstThreeKeys = keys.slice(0, 3);
+        console.log(
+            `The dictionary has the following keys: ${firstThreeKeys.join(
+                ", "
+            )} and ${keyCount - 3} remaining keys.`
+        );
     }
 }
 
@@ -196,39 +124,6 @@ const getAllBlogPosts = async (page) => {
         throw error;
     }
 };
-
-function extractNameAndDescription(item) {
-    let mainName = "";
-    let description = "";
-
-    // Determine main name
-    if (item.common_name) {
-        mainName = item.common_name;
-    } else if (item.scientific_name) {
-        mainName = item.scientific_name;
-    } else {
-        mainName = "Unnamed";
-    }
-
-    // Capitalize every word in main name
-    mainName = mainName.replace(/\b\w/g, (char) => char.toUpperCase());
-
-    // Determine description
-    if (!item.common_name && item.scientific_name) {
-        description = item.slug ? `Slug: ${item.slug}` : "Not available";
-    } else if (item.synonyms && item.synonyms.length > 0) {
-        description = `${item.synonyms[0]}`;
-    } else if (item.slug) {
-        description = `Slug: ${item.slug}`;
-    } else {
-        description = "Not available";
-    }
-
-    // Uppercase first letter in description
-    description = description.charAt(0).toUpperCase() + description.slice(1);
-
-    return [mainName, description];
-}
 
 const BlogsScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState("");

@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Dimensions,
     SafeAreaView,
-    Modal
+    Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -20,9 +20,6 @@ import PlantProfileScreen from "./PlantProfileScreen";
 const SEARCH_API_URL = `${HOST}/perenual/plants-details`;
 
 const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
-const widthFactor = 0.88;
-const heightFactor = 0.09;
 
 function extractNameAndDescription(item) {
     let mainName = "";
@@ -62,7 +59,7 @@ const SearchScreen = () => {
     const [plantsData, setPlantsData] = useState([]);
     const [timer, setTimer] = useState(null);
     const [modalShown, setModalShown] = useState(false);
-    const [requestedItemID, setRequestedItemID] = useState('');
+    const [requestedItemID, setRequestedItemID] = useState("");
 
     useEffect(() => {
         if (timer) {
@@ -137,11 +134,12 @@ const SearchScreen = () => {
                 keyExtractor={(item) => item.id}
                 numColumns={1}
             />
-            <Modal
-                visible={modalShown}
-            >
-                <View style={{ flex: 1 }} >
-                    <PlantProfileScreen plantID={requestedItemID} modalSetter={setModalShown} ></PlantProfileScreen>
+            <Modal visible={modalShown}>
+                <View style={{ flex: 1 }}>
+                    <PlantProfileScreen
+                        plantID={requestedItemID}
+                        modalSetter={setModalShown}
+                    ></PlantProfileScreen>
                 </View>
             </Modal>
         </SafeAreaView>

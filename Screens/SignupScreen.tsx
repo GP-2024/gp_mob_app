@@ -28,18 +28,12 @@ function RegisterScreen(props) {
                 `${HOST}/auth/local/signup`,
                 values
             );
-            console.log("signed up success...");
-            console.log(response);
             Alert.alert(
                 "",
                 "Account successfully registered!\nYou can now sign in."
             );
         } catch (error) {
-            console.log("====CATCH====")
-            console.log(`${HOST}/auth/local/signup`);
-            console.log(error.response.data.message);
-            console.log("error catched...");
-            console.log("============")
+            Alert.alert("Error", "An error occurred. Please try again.");
         }
     };
 

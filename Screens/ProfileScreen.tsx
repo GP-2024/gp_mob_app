@@ -3,32 +3,20 @@ import {
   Image,
   Alert,
   View,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   SafeAreaView,
   ScrollView,
-  Button,
   Text,
   Pressable,
 
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import type { PropsWithChildren } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import { Button, Text, Input, CheckBox, LinearGradient } from '@rneui/themed';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+
 const HOST = process.env.HOST;
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
 import defaultStyles from "../config/styles";
 import useAuth, { getAccessToken } from '../components/useAuth';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { getAccessToken, } from '../components/useAuth';
+
 
 async function getUserProfile(accessToken) {
   const url = `${HOST}/auth/local/myProfile`;
@@ -49,7 +37,6 @@ async function getUserProfile(accessToken) {
     const data = await response.json();
 
     if (data && data.metadata) {
-      console.log(data.metadata);
       return data.metadata;
     } else {
       throw new Error('Invalid response format');
@@ -61,7 +48,7 @@ async function getUserProfile(accessToken) {
   }
 }
 
-// "lastName" in metadata 
+// "lastName" in metadata
 // 'firstName' in metadata
 // "profileIMG" in metadata
 
@@ -231,9 +218,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
   },
   topBanner: {
     flex: 3.5,
@@ -241,9 +225,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 40,
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
   },
   topTitleContainer: {
     flex: 1,
@@ -251,9 +232,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 10
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
   },
   secondaryTitleContainer: {
     flex: 1,
@@ -261,46 +239,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 5
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
+
   },
   inputContainer: {
     flex: 1,
     alignItems: 'stretch',
-
-
-
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
   },
   sideButtonContainer: {
     flex: 0.5,
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
+
   },
   buttonContainer: {
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
   },
   horizContainer: {
     flex: 0.6,
     flexDirection: 'row',
     alignItems: 'stretch',
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
   },
   centerContainer: {
     flex: 1,
@@ -308,9 +270,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
 
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
+
   },
   agreementContainer: {
     flexDirection: 'row',
@@ -319,23 +279,16 @@ const styles = StyleSheet.create({
   upperBlock: {
     flex: 1,
     backgroundColor: defaultStyles.colors.primary,
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
+
   },
   bottomBlock: {
     flex: 2,
-    // borderWidth: 1,
-    // borderColor: 'red',
-    // margin: 3,
+
   },
   floatingContainerStyle: {
     width: '85%',
     height: '95%',
     position: 'absolute',
-    // borderWidth: 3,
-    // borderColor: 'green',
-    // margin: 10,
     alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'stretch',
@@ -416,14 +369,14 @@ const styles = StyleSheet.create({
 
 });
 
-// h1            47.78px     
-// h2            39.81px     
-// h3            33.18px     
-// h4            27.65px     
-// h5            23.04px     
-// h6            19.2px     
-// p            16px     
-// small        13.33px     
+// h1            47.78px
+// h2            39.81px
+// h3            33.18px
+// h4            27.65px
+// h5            23.04px
+// h6            19.2px
+// p            16px
+// small        13.33px
 // smaller        11.11px
 
 // Export the component

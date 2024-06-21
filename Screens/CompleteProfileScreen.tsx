@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Dimensions, Modal, Image, TouchableOpacity, Button, Alert, ImageBackground, ScrollView, Pressable, LogBox, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-paper'
-import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import Icon from "react-native-vector-icons/FontAwesome6";
-import { Picker } from '@react-native-picker/picker';
-import RNPickerSelect from 'react-native-picker-select';
 import { Dropdown } from 'react-native-element-dropdown';
-// import DateTimePicker from '@react-native-community/datetimepicker';
-// import { getAccessToken } from "../components/useAuth";
 import DateTimePicker from 'react-native-ui-datepicker';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 const HOST = process.env.HOST;
 
 const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
 
 const pfpSideLength = screenWidth / 4.3;
 
@@ -44,10 +38,7 @@ const CompleteProfileScreen = ({ loginFunction,
   };
 
   const onChange = (selectedDate) => {
-    console.log("debug1");
     const currentDate = selectedDate['date'];
-    console.log("debug2");
-    console.log(currentDate);
     setShow(false);
     setDate(currentDate);
     setDateHasBeenSet(true);
@@ -78,7 +69,6 @@ const CompleteProfileScreen = ({ loginFunction,
   const handleSubmit = async () => {
     if (!profilePicture || !firstName || !lastName || !gender || !dateStampOfBirth || !country) {
       setError('All fields, and a profile picture are required.');
-      // setTimeout(() => setError(''), 5000);
       return;
     }
 
@@ -93,27 +83,7 @@ const CompleteProfileScreen = ({ loginFunction,
 
     setTimeoutId(timeout);
 
-    console.log("debug ax");
     const token = loginResponse.data.tokens.access_token;
-    console.log("token for completing profile:");
-    console.log(token);
-
-    // setLoading(true);
-
-    // console.log("debug ay");
-
-    // const timeout = setTimeout(() => {
-    //   setLoading(false);
-    //   Alert.alert('', 'Operation timed out. Please try again.');
-    // }, 60000);
-
-    // setTimeoutId(timeout);
-
-    // const token = loginResponse.data.tokens.access_token;
-    // console.log("token for completing profile:");
-    console.log(token);
-
-
 
     try {
 
@@ -143,9 +113,6 @@ const CompleteProfileScreen = ({ loginFunction,
           dateOfBirth,
           country,
         };
-
-        console.log("profile data: ");
-        console.log(profileData);
 
         const profileResponse = await axios.put(`${HOST}/auth/local/updateProfile`, profileData, {
           headers: {
