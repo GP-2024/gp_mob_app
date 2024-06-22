@@ -13,11 +13,15 @@
             }
         },
         "preview3": {
-            "developmentClient": true
+            "developmentClient": true,
+            "image": "latest"
         },
         "preview4": {
-            "distribution": "internal"
+            "distribution": "internal",
+            "image": "latest"
         },
-        "production": {}
+        "production": {
+            "image": "latest"
+        }
     }
 }
