@@ -1,36 +1,34 @@
 {
-  "expo": {
-    "name": "gp_mob_app",
-    "slug": "gp_mob_app",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.ahmed7ossam.gp_mob_app"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "4353308c-f889-42a7-b053-0d246c3c94e2"
-      }
+    "expo": {
+        "name": "From Root To Bloom",
+        "slug": "from_root_to_bloom",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/from_root_to_bloom",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/from_root_to_bloom",
+            "resizeMode": "cover",
+            "backgroundColor": "#FFFFFF"
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "package": "com.ahmed7ossam.gp_mob_app"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "4353308c-f889-42a7-b053-0d246c3c94e2"
+            }
+        }
     }
-  }
 }
