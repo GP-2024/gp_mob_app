@@ -12,7 +12,6 @@
     "@expo/config-plugins": "~8.0.0",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
-    "@react-native-community/datetimepicker": "^8.1.1",
     "@react-native-picker/picker": "2.7.5",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
@@ -21,7 +20,6 @@
     "axios": "^1.6.8",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "dotenv": "^16.4.5",
-    "expo": "^51.0.13",
     "expo-constants": "~16.0.2",
     "expo-image-manipulator": "~12.0.5",
     "expo-image-picker": "~15.0.5",
@@ -43,11 +41,11 @@
     "react-native-toast-notifications": "^3.4.0",
     "react-native-ui-datepicker": "^2.0.3",
     "react-native-vector-icons": "^10.0.3",
+    "react-native-webview": "13.8.6",
     "react-navigation": "^5.0.0",
     "typescript": "~5.3.3",
     "undefined": "react-native-community/datetimepicker",
-    "yup": "^1.4.0",
-    "react-native-webview": "13.8.6"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
