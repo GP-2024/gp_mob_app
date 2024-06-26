@@ -241,7 +241,7 @@ export default function App() {
                                         <></>
                                     : (
                                         <>
-                                            <TouchableOpacity
+                                            {/* <TouchableOpacity
                                                 onPress={() =>
                                                     props.navigation.navigate(
                                                         "Login"
@@ -270,7 +270,7 @@ export default function App() {
                                                         defaultStyles.colors.primary
                                                     }
                                                 />
-                                            </TouchableOpacity>
+                                            </TouchableOpacity> */}
                                         </>
                                     )}
                             </View>

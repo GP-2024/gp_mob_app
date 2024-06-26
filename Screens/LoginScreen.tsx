@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View, Alert, Modal } from "react-native";
+import { Image, TouchableOpacity, ScrollView, StyleSheet, View, ActivityIndicator, Alert, Modal } from "react-native";
 import axios from "axios";
 
 import defaultStyles from "../config/styles";
-
+import { Text } from "react-native-paper";
 import Logo from "../assets/logo.svg";
 
 import * as Yup from "yup";
@@ -71,10 +71,13 @@ async function getUserProfile(accessToken) {
 
 let retrievedLoginResponse;
 
-function LoginScreen(props) {
+function LoginScreen({ navigation }) {
     const { login, logout } = useAuth();
     const [modalShown, setModalShown] = useState(false);
+
+    const [loading, setLoading] = useState(false);
     const handleSubmit = async ({ emailOrUsername, password }) => {
+        setLoading(true);
         const isEmail = emailOrUsername.includes("@");
         const body = isEmail
             ? { email: emailOrUsername, password }
@@ -111,6 +114,9 @@ function LoginScreen(props) {
         } catch (error) {
             console.log(body);
             console.log(error.response.data);
+            Alert.alert("Oops!", error.response.data.message + ".");
+        }finally {
+            setLoading(false);
         }
     };
     return (
@@ -141,7 +147,6 @@ function LoginScreen(props) {
                         secureTextEntry={true}
                         name="password"
                     />
-                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
 
                     <View
                         style={{ alignItems: "center", justifyContent: "center" }}
@@ -149,10 +154,20 @@ function LoginScreen(props) {
                         <SubmitButton title="Login" />
                     </View>
 
-                    <AppText style={styles.signup}>
-                        Don't have an account?{" "}
-                        <Text style={styles.signupLink}>Sign up</Text>
-                    </AppText>
+                    <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "center", }}>
+                        <AppText style={styles.signup}>
+                            Don't have an account?{" "}
+                        </AppText>
+                        <TouchableOpacity
+                            onPress={(e) => {
+                                {
+                                    navigation.navigate("Sign Up");
+                                }
+                            }}
+                        >
+                            <Text style={[styles.signup, styles.signupLink]}>Sign Up</Text>
+                        </TouchableOpacity>
+                    </View>
                 </AppForm>
             </ScrollView>
             <Modal
@@ -162,11 +177,20 @@ function LoginScreen(props) {
                     <CompleteProfileScreen
                         loginFunction={login}
                         loginResponse={retrievedLoginResponse}
-                        modalSetter={setModalShown} 
-                        >
+                        modalSetter={setModalShown}
+                    >
                     </CompleteProfileScreen>
                 </View>
             </Modal>
+            {loading && (
+                <Modal transparent={true} animationType="none">
+                    <View style={styles.overlay}>
+                        <View style={styles.loaderContainer}>
+                            <ActivityIndicator size="large" color="green" />
+                        </View>
+                    </View>
+                </Modal>
+            )}
         </Screen>
     );
 }
@@ -215,6 +239,21 @@ const styles = StyleSheet.create({
     signupLink: {
         textDecorationLine: "underline",
         color: defaultStyles.colors.primary,
+    },
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loaderContainer: {
+        width: 100,
+        height: 100,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
     },
 });
 
